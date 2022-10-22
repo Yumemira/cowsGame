@@ -1,0 +1,57 @@
+footer
+{
+    top: 0%;
+    left: 0%;
+    width: 100%;
+}
+
+#upperFrame
+{
+    position: fixed;
+    width: 100%;
+    height:5%;
+    background-color: black;
+}
+
+a
+{
+    
+}
+
+nav
+{
+    font-size: 30px;
+    color: white;
+
+    position: fixed;
+    left: 45%;
+}
+
+main
+{
+    position: absolute;
+    width: 100%;
+    height: 70%;
+    bottom: 0px;
+    left: 0px;
+    background-color: black;
+    opacity: 0.9;
+}
+
+#userProfile
+{
+    position: absolute;
+    background-color: white;
+    top:0%;
+    right:0%;
+}
+
+.inlineText
+{
+    display: inline;
+}
+
+.login
+{
+
+}

@@ -1,34 +1,39 @@
 import logo from '../logo.svg';
+import './MainMenuStyle.css';
 
-function MainMenuElement(username)
+function MainMenuElements()
 {
   const elems = [3];
 
+  //TODO: container main with contents, container upperFrame, top-right account button
+  // upper frame with buttons that represents play, forum and about links to go;
   elems[0] = (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>);
-  
+    <footer>
+      <div id="upperFrame">
+        <nav>
+          <a>Play</a>|
+          <a>Forum</a>|
+          <a>About</a>
+        </nav>
+      </div>
+    </footer>
+  );
+
+  //main container with content loads dynamicly
   elems[1] = (
-    <h1>Hello, World!</h1>
-  );
+    <main>
+      
+    </main>
+  ); 
+
   elems[2] = (
-    <h2>Hello, {username}!</h2>
-  );
+    <div id="userProfile">
+      <p class="inlineText">{"<<"}</p>
+      <button class="inlineText" id="login">Login</button>
+    </div>
+  ); 
+
   return elems;
 }
 
-export default MainMenuElement;
+export default MainMenuElements;

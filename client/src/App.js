@@ -1,9 +1,10 @@
 import './App.css';
-import MainMenuElement from './views/MainMenuFrame';
+import MainMenuElements from './views/MainMenuFrame';
 
 
-function App() {
-  const elem = MainMenuElement("Yumi");
+function App()
+{
+  const elem = MainMenuElements();
   return elem;
 }
 
