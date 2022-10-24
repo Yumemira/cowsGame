@@ -1,12 +1,13 @@
 import logo from '../logo.svg';
 import './MainMenuStyle.css';
 import ReactDOM from 'react-dom';
+import React from 'react';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
 
+/*
 function MainMenuElements()
 {
-  const elems = [3];
+  const elems = [4];
 
   //TODO: container main with contents, container upperFrame, top-right account button
   // upper frame with buttons that represents play, forum and about links to go;
@@ -32,23 +33,43 @@ function MainMenuElements()
   elems[2] = (
     <div id="userProfile">
       <p class="inlineText">{"<<"}</p>
-      <button class="inlineText" id="login" onClick="loginInstantiate()">Login</button>
+      <button class="inlineText" id="login">Login</button>
     </div>
   ); 
+
+  elems[3] = (<Toggle />);
 
   return elems;
 }
 
-function loginInstantiate()
-{
-
-  root.render(<loginElement />);
-}
-
 export default MainMenuElements;
+
 
 class loginElement extends React.Component
 {
+  render() {
+    return (
+      
+    );
+  }
+}
+*/
+
+class Toggle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {isToggleOn: true};
+
+    // This binding is necessary to make `this` work in the callback
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.setState(prevState => ({
+      isToggleOn: !prevState.isToggleOn
+    }));
+  }
+
   render() {
     return (
       <section id="loginMenu">
@@ -70,3 +91,5 @@ class loginElement extends React.Component
     );
   }
 }
+
+export default Toggle;
