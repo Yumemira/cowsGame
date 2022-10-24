@@ -13,10 +13,6 @@ footer
     background-color: black;
 }
 
-a
-{
-    
-}
 
 nav
 {
@@ -51,7 +47,11 @@ main
     display: inline;
 }
 
-.login
+#loginMenu
 {
-
+    position: absolute;
+    width: 60%;
+    height:60%;
+    top:20%;
+    left: 20%;
 }
