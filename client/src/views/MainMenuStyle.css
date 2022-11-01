@@ -49,19 +49,32 @@ main
 
 #loginMenu
 {
+    font-size: 30px;
     position: absolute;
-    width: 40%;
+    width: 20%;
     height:40%;
     top:30%;
-    left: 30%;
+    left: 40%;
 }
 
-.login
+.submitForm
+{
+
+}
+
+.--visibled
 {
     visibility: visible;
 }
 
-.login--hidden
+.--hidden
 {
     visibility: hidden;
+}
+
+#logregField
+{
+    color: white;
+    background-color: black;
+    opacity: 0.9;
 }
