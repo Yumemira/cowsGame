@@ -1,10 +1,10 @@
 import './App.css';
-import Toggle from './views/MainMenuFrame';
+import MainMenuElements from './views/MainMenuFrame';
 
 
 function App()
 {
-  const elem = (<Toggle />);
+  const elem = MainMenuElements();
   return elem;
 }
 
