@@ -34,17 +34,26 @@ main
     opacity: 0.9;
 }
 
-#userProfile
+.refButtons
+{
+    display: inline-block;
+    background-color: white;
+    color: black;
+}
+
+.refButtons:hover
+{
+    background-color: gray;
+}
+
+#inlineText
 {
     position: absolute;
     background-color: white;
     top:0%;
     right:0%;
-}
-
-.inlineText
-{
-    display: inline;
+    font-size: 24px;
+    width: 10%;
 }
 
 #loginMenu

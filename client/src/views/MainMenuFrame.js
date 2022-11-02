@@ -1,6 +1,4 @@
-import logo from '../logo.svg';
 import './MainMenuStyle.css';
-import ReactDOM from 'react-dom';
 import React from 'react';
 import classnames from "classnames";
 
@@ -14,9 +12,9 @@ function MainMenuElements()
     <footer>
       <div id="upperFrame">
         <nav>
-          <a>Play</a>|
-          <a>Forum</a>|
-          <a>About</a>
+          <a className="refButtons" key="p">Play</a>|
+          <a className="refButtons" key="f">Forum</a>|
+          <a className="refButtons" key="a">About</a>
         </nav>
       </div>
     </footer>
@@ -91,10 +89,7 @@ class Toggle extends React.Component {
     }
     return (
       <div>
-        <div id="userProfile">
-          <p className="inlineText">{"<<"}</p>
-          <button className="inlineText" id="login" onClick={this.handleClick}>login</button>
-        </div>
+        <button id="inlineText" onClick={this.handleClick}>{"<<"} login</button>
         <section id="loginMenu" className={classnames("--visibled", {
             "--hidden": !this.state.isToggleOn
           })}>
