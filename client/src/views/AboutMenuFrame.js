@@ -2,30 +2,31 @@ import React from "react";
 import "./AboutMenuStyle.css";
 import MainMenuElements from "./MainMenuFrame";
 
-
-function GetDataFunc()
-{
-  const [data, setData] = React.useState(() => null);
-  
-  React.useEffect(() => {
-    fetch("/about")
-      .then((res) => res.json())
-      .then((data) => console.log("Lived!"));
-  }, []);
-  
-  let elem = MainMenuElements();
-  elem[1] = (
-    <main>
-      <p>{data}</p>
-    </main>
-  );
-  return elem;
-}
-
 export default class AboutMenu extends React.Component
 {
+  constructor(props)
+  {
+    super(props);
+    this.state = {
+      data:[]
+    };
+  }
+
+  componentDidMount()
+  {
+
+    fetch("http://localhost:3001/about")
+      .then((res) => res.json())
+      .then((data) => console.log("Lived!"));
+  }
+
   render(){
     let elems = MainMenuElements();
+    elems[1] = (
+        <main>
+          <p>{this.data}</p>
+        </main>
+      );
 
     return elems;
   }
