@@ -8,7 +8,7 @@ export default class AboutMenu extends React.Component
   {
     super(props);
     this.state = {
-      data:[]
+      data:""
     };
   }
 
@@ -17,14 +17,18 @@ export default class AboutMenu extends React.Component
 
     fetch("http://localhost:3001/about")
       .then((res) => res.json())
-      .then((data) => console.log("Lived!"));
+      .then((fetchedData) => {
+        this.setState({
+          data:fetchedData.message
+        });
+      });
   }
 
   render(){
     let elems = MainMenuElements();
     elems[1] = (
         <main>
-          <p>{this.data}</p>
+          <p className="inMainText">{this.state.data}</p>
         </main>
       );
 
