@@ -13,8 +13,8 @@ function MainMenuElements()
       <div id="upperFrame">
         <nav>
           <a className="refButtons" key="p">Play</a>|
-          <a className="refButtons" key="f">Forum</a>|
-          <a className="refButtons" key="a">About</a>
+          <a href='/' className="refButtons" key="f">Forum</a>|
+          <a href='/about' className="refButtons" key="a">About</a>
         </nav>
       </div>
     </footer>

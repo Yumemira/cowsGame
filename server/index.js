@@ -6,10 +6,10 @@ const port = process.env.DEFAULT_PORT;
 
 const app = express();
 
-app.use(cors({origin: 'http://localhost:3000'}));
+app.use(cors({origin: process.env.REACT_FRONT_PATH}));
 
 app.get("/about", (req, res) => {
-    res.json({ message: "Hello from server!" });
+    res.json({ message: "Love you... forever" });
   });
 
 app.listen(port, () => {
