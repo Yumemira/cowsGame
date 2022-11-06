@@ -22,7 +22,7 @@ function MainMenuElements()
   //main container with content loads dynamicly
   elems[1] = (
     <main>
-      
+      <button name="submitForm" className="submitForm" onClick={getRegistered}>Register</button>
     </main>
   ); 
 
@@ -117,12 +117,43 @@ class RegisterField extends React.Component
         <input type="password" name="password"></input><br/>
         <label htmlFor="repeatPassword">repeat: </label>
         <input type="password" name="repeatPassword"></input><br/>
-        <button name="submitForm" className="submitForm">Register</button>
+        <button name="submitForm" className="submitForm" onClick={getRegistered}>Register</button>
       </fieldset>
     );
   }
 }
 
+function getRegistered()
+{
+  const getCircularReplacer = () => {
+    const seen = new WeakSet();
+    return (key, value) => {
+      if (typeof value === 'object' && value !== null) {
+        if (seen.has(value)) {
+          return;
+        }
+        seen.add(value);
+      }
+      return value;
+    };
+  };
+
+  const username = document.getElementsByName("name")[0];
+  const useremail = document.getElementsByName("email")[0];
+  const userpassword = document.getElementsByName("password")[0];
+  
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({uname: username})
+  };
+  
+  fetch('http://localhost:3001/register', requestOptions)
+      .then((res) => {
+          return res.json();
+      })
+      .then((data) => console.log(data));
+}
 class LoginField extends React.Component
 {
   render() {
