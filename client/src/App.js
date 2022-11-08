@@ -10,8 +10,8 @@ function App()
   <Router>
     <div className="app-container">
       <Routes>
-        <Route path="/" element={<ForumMenu />} />
-        <Route path='/about' element={<AboutMenu />} />
+        <Route path="/" key="h" element={<ForumMenu />} />
+        <Route path='/about' key="a" element={<AboutMenu />} />
       </Routes>
     </div>
   </Router>

@@ -2,6 +2,7 @@ import './MainMenuStyle.css';
 import React from 'react';
 import classnames from "classnames";
 import axios from "axios";
+import validator from "validator";
 
 function MainMenuElements()
 {
@@ -13,7 +14,7 @@ function MainMenuElements()
     <footer>
       <div id="upperFrame">
         <nav>
-          <a className="refButtons" key="p">Play</a>|
+          <a href='/game-prepare'className="refButtons" key="p">Play</a>|
           <a href='/' className="refButtons" key="f">Forum</a>|
           <a href='/about' className="refButtons" key="a">About</a>
         </nav>
@@ -32,11 +33,6 @@ function MainMenuElements()
   );
 
   return elems;
-}
-
-function toggling()
-{
-  const elem = document.getElementsByTagName("Toggle")[0].handleClick()
 }
 
 
@@ -110,14 +106,14 @@ class RegisterField extends React.Component
     return(
       <fieldset>
         <legend>Register:</legend>
-        <label htmlFor="email">email: </label>
-        <input type="email" name="email"></input><br/>
-        <label htmlFor="username">name: </label>
-        <input type="text" name="username"></input><br/>
-        <label htmlFor="password">password: </label>
-        <input type="password" name="password"></input><br/>
-        <label htmlFor="repeatPassword">repeat: </label>
-        <input type="password" name="repeatPassword"></input><br/>
+        <label htmlFor="email" key="fe">email: </label>
+        <input type="email" name="email" key="e"></input><br/>
+        <label htmlFor="username" key="fn">name: </label>
+        <input type="text" name="username" key="n"></input><br/>
+        <label htmlFor="password" key="fp">password: </label>
+        <input type="password" name="password" key="p"></input><br/>
+        <label htmlFor="repeatPassword" key="fr">repeat: </label>
+        <input type="password" name="repeatPassword" key="r"></input><br/>
         <button name="submitForm" className="submitForm" onClick={getRegistered}>Register</button>
       </fieldset>
     );
@@ -126,26 +122,45 @@ class RegisterField extends React.Component
 
 function getRegistered()
 {
-  const getCircularReplacer = () => {
-    const seen = new WeakSet();
-    return (key, value) => {
-      if (typeof value === 'object' && value !== null) {
-        if (seen.has(value)) {
-          return;
-        }
-        seen.add(value);
-      }
-      return value;
-    };
-  };
+  const username = document.getElementsByName("username")[0].value;
+  const useremail = document.getElementsByName("email")[0].value;
+  const userpassword = document.getElementsByName("password")[0].value;
+  const userRepeatPassword = document.getElementsByName("repeatPassword")[0].value;
 
-  const username = document.getElementsByName("name")[0];
-  const useremail = document.getElementsByName("email")[0];
-  const userpassword = document.getElementsByName("password")[0];
+  if(checkedData(username, useremail, userpassword, userRepeatPassword))
+  {
+    axios.post('http://localhost:3001/register',{uname: username,
+    umail: useremail,
+    upassword: userpassword})
+    .then((res) => console.log(res.data.message))
+    .catch(err => console.log(err));
+  }
+  else
+  {
+    console.log("failed to register");
+  }
+}
 
-  axios.post('http://localhost:3001/register',{title:"this is not the end!"})
-  .then((res) => console.log(res.data))
-  .catch(err => console.log(err));
+function checkedData(uname, email, pass, repeatpass)
+{
+  if(uname.length < 3)
+  {
+    return false;
+  }
+  if(pass.length < 8)
+  {
+    if(pass !== repeatpass)
+    {
+      return false;
+    }
+    return false;
+  }
+  if(!validator.isEmail(email))
+  {
+    return false;
+  }
+
+  return true;
 }
 class LoginField extends React.Component
 {
