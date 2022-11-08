@@ -23,7 +23,7 @@ module.exports = {
                 }
 
                 client.end();
-                resolve(res.rows[0]);
+                resolve(res.rows);
             });
         });
     }
