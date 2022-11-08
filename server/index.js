@@ -22,15 +22,24 @@ app.post("/register",function(req, res){
   const umail = req.body.umail;
   const upass = req.body.upassword;
 
-/*
-  tools.queryToDb(`
-  INSERT INTO userstable (name, email, password)
-  VALUES ('`+ uname + `', '`+ umail +`', '`+ upass +`');
-  `);
-*/
-  tools.queryToDb("select * from userstable")
-  .then((ret) => console.log(ret));
-  res.json({message: "data was cathced"});
+
+  tools.queryToDb("select email from userstable where email = '" + umail + "' limit 1")
+  .then((ret) => {
+    if(ret.length === 0)
+    {
+      tools.queryToDb(`
+      INSERT INTO userstable (name, email, password)
+      VALUES ('`+ uname + `', '`+ umail +`', '`+ upass +`');
+      `);
+
+      res.json({message: "data was cathced"});
+    }
+    else
+    {
+      res.json({message: "email has already been used!"});
+    }
+  });
+
 });
 
 
