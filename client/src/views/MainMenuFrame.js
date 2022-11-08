@@ -1,6 +1,7 @@
 import './MainMenuStyle.css';
 import React from 'react';
 import classnames from "classnames";
+import axios from "axios";
 
 function MainMenuElements()
 {
@@ -141,18 +142,10 @@ function getRegistered()
   const username = document.getElementsByName("name")[0];
   const useremail = document.getElementsByName("email")[0];
   const userpassword = document.getElementsByName("password")[0];
-  
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({uname: username})
-  };
-  
-  fetch('http://localhost:3001/register', requestOptions)
-      .then((res) => {
-          return res.json();
-      })
-      .then((data) => console.log(data));
+
+  axios.post('http://localhost:3001/register',{title:"this is not the end!"})
+  .then((res) => console.log(res.data))
+  .catch(err => console.log(err));
 }
 class LoginField extends React.Component
 {

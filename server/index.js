@@ -3,9 +3,8 @@ const { Client } = require("pg");
 const express = require("express");
 const cors = require('cors');
 const { query } = require("express");
-const bp = require('body-parser');
-const app = express();
 
+const app = express();
 const port = process.env.DEFAULT_PORT;
 const client = new Client({
   user: 'commonmanager',
@@ -15,20 +14,19 @@ const client = new Client({
   port: 23014,
 });
 
-const urlencodedParser = bodyParser.urlencoded({
-  extended: false,
-});
 
+app.use(express.urlencoded());
 app.use(cors({origin: process.env.REACT_FRONT_PATH}));
-
+app.use(express.json());
 
 
 app.get("/about", (req, res) => {
     res.json({ message: "Love you... forever" });
-  });
+});
 
-  app.post("/register",urlencodedParser,function(req, res){
-
+app.post("/register",function(req, res){
+  console.log(req.body.title);
+  res.json({message: "data was cathced"});
 
 //  console.log(uname + " " + umail + " " + upassword);
 /*
@@ -36,6 +34,7 @@ app.get("/about", (req, res) => {
     INSERT INTO userstable (name, email, password)
     VALUES ('`+ uname + `', '`+ umail +`', '`+ upassword +`');
   `;
+
   const que = `
     INSERT INTO public.userstable (name, email, password)
     VALUES ('uname', 'umail', 'upassword');
@@ -50,8 +49,8 @@ app.get("/about", (req, res) => {
     console.log('Data insert successful');
     client.end();
 });
-*/
 
+*/
 });
 
 client.connect();
