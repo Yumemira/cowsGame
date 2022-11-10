@@ -15,7 +15,7 @@ export default class CommentConstructor extends React.Component
     {
         return(
             <div className="comment--body">
-                <h1 className="comment--author-name">{this.state.author.name}</h1>
+                <header className="comment--author-name">{this.state.author.name}</header>
                 <p className="comment--text">{this.state.text}</p>
             </div>
         );

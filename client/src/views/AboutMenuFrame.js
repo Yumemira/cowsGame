@@ -4,11 +4,6 @@ import MainMenuElements from "./MainMenuFrame";
 import PostConstructor from "./components/postsConstructor";
 export default class AboutMenu extends React.Component
 {
-  constructor(props)
-  {
-    super(props);
-  }
-
   render(){
     let text = [3];
     text[0] = `Внимание! На планету вторглись инопланетяне и захватили материк!

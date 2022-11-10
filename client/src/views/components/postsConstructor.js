@@ -7,23 +7,46 @@ export default class PostConstructor extends React.Component
     constructor(props)
     {
         super(props);
-        let commentsList = getComments(this.props.idPost);
         this.state = {
+            id: this.props.postId,
             isOpened: false,
+            isComments: false,
             header: this.props.titleName,
             hashTags: this.props?.postHashTags,
             text: this.props.textData,
             author: this.props?.textAuthor,
-            comments: commentsList
+            comments: []
         };
         this.showPost = this.showPost.bind(this);
+        this.GetComments = this.GetComments.bind(this);
+        this.showComms = this.showComms.bind(this);
+    }
+
+    GetComments = function(comProp)
+    {
+        let authorCreate = {
+            name: "David",
+            id: comProp.postId
+        };
+        let textCom = "helloThere";
+
+        let commentsList = <CommentConstructor authorProps={authorCreate} textData={textCom} />;
+        return (<div className="post--comments-part">
+            {commentsList}
+        </div>);
     }
 
     showPost = function()
     {
-        console.log("it works");
         this.setState(prevState => ({
             isOpened:!prevState.isOpened
+        }));
+    }
+
+    showComms = function()
+    {
+        this.setState(prevState => ({
+            isComments:!prevState.isComments
         }));
     }
 
@@ -33,41 +56,34 @@ export default class PostConstructor extends React.Component
         if(this.state.isOpened)
         {
             elem = (
-                <div className="post--container" onClick={this.showPost}>
-                    <header className="post--title">{this.state.header}</header>
-                    <h1 className="post--tags">{this.state.hashTags}</h1>
-                    <p className="post--body">{this.state.text}</p>
+                <div className="post--container">
+                    <div className="post--body" onClick={this.showPost}>
+                        <header className="post--title">{this.state.header}</header>
+                        <h1 className="post--tags">{this.state.hashTags}</h1>
+                        <p className="post--body">{this.state.text}</p>
+                    </div>
                     <button className="post--button">Лайк</button>
-                    <button className="post--button">Комм</button>
+                    <button className="post--button" onClick={this.showComms}>Комм</button>
+                    {this.state.isComments ? <this.GetComments postId='1'/> : null}
                 </div>
                 );
         }
         else
         {
             elem = (
-                <div className="post--container" onClick={this.showPost}>
-                    <header className="post--title">{this.state.header}</header>
-                    <h1 className="post--tags">{this.state.hashTags}</h1>
-                    <p className="post--body">{this.state.text.substring(0,100) + "..."}</p>
+                <div className="post--container">
+                    <div className="post--body" onClick={this.showPost}>
+                        <header className="post--title">{this.state.header}</header>
+                        <h1 className="post--tags">{this.state.hashTags}</h1>
+                        <p className="post--body">{this.state.text.substring(0,100) + "..."}</p>
+                    </div>
                     <button className="post--button">Лайк</button>
-                    <button className="post--button">Комм</button>
+                    <button className="post--button" onClick={this.showComms}>Комм</button>
+                    {this.state.isComments ? <this.GetComments postId='1'/> : null}
                 </div>
                 );
         }
 
         return elem;
     }
-}
-
-function getComments(postId)
-{
-    let authorCreate = {
-        name: "David",
-        id: "1324"
-    };
-
-    let commentsList = <CommentConstructor authorProps={authorCreate} textData="helloThere" />;
-    return (<div className="post--comments-part">
-        {commentsList}
-    </div>);
 }
