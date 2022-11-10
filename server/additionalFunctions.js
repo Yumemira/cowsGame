@@ -12,9 +12,10 @@ module.exports = {
         });
 
 
-        client.connect();
 
         return new Promise(function (resolve, reject){
+            client.connect();
+
             client.query(que, (err, res) => {
                 if (err)
                 {

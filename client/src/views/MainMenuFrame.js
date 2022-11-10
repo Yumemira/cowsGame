@@ -14,9 +14,9 @@ function MainMenuElements()
     <footer>
       <div id="upperFrame">
         <nav>
-          <a href='/game-prepare'className="refButtons" key="p">Play</a>|
-          <a href='/' className="refButtons" key="f">Forum</a>|
-          <a href='/about' className="refButtons" key="a">About</a>
+          <a href='/game-prepare'className="refButtons" key="p">Играть</a>|
+          <a href='/' className="refButtons" key="f">Форум</a>|
+          <a href='/about' className="refButtons" key="a">О проекте</a>
         </nav>
       </div>
     </footer>
@@ -24,7 +24,7 @@ function MainMenuElements()
   //main container with content loads dynamicly
   elems[1] = (
     <main>
-      <button name="submitForm" className="submitForm" onClick={getRegistered}>Register</button>
+
     </main>
   ); 
 
@@ -42,7 +42,7 @@ class Toggle extends React.Component {
     this.state = {
       isToggleOn: false,
       isRegisterOn: true,
-      toggleButtonText: "Login"
+      toggleButtonText: "Вход"
     };
 
     // This binding is necessary to make `this` work in the callback
@@ -60,11 +60,11 @@ class Toggle extends React.Component {
     let texting;
     if(this.state.isRegisterOn)
     {
-      texting = "Register"
+      texting = "Регистрация";
     }
     else
     {
-      texting = "Login"
+      texting = "Вход";
     }
 
     this.setState(prevState => ({
@@ -86,14 +86,14 @@ class Toggle extends React.Component {
     }
     return (
       <div>
-        <button id="inlineText" onClick={this.handleClick}>{"<<"} login</button>
+        <button id="inlineText" onClick={this.handleClick}>{"<<"} Войти </button>
         <section id="loginMenu" className={classnames("--visibled", {
             "--hidden": !this.state.isToggleOn
           })}>
-          <form id="logregField">
+          <div id="logregField">
             <input type='button' value={this.state.toggleButtonText} onClick={this.changeFieldset}></input>
             {fieldSet}
-          </form>
+          </div>
         </section>
       </div>
     );
@@ -104,18 +104,19 @@ class RegisterField extends React.Component
 {
   render() {
     return(
-      <fieldset>
-        <legend>Register:</legend>
-        <label htmlFor="email" key="fe">email: </label>
+      <>
+        <p> Регистрация </p>
+        <p id ="attentionRegText"></p>
+        <label htmlFor="email" key="fe"> почта: </label>
         <input type="email" name="email" key="e"></input><br/>
-        <label htmlFor="username" key="fn">name: </label>
+        <label htmlFor="username" key="fn"> имя: </label>
         <input type="text" name="username" key="n"></input><br/>
-        <label htmlFor="password" key="fp">password: </label>
+        <label htmlFor="password" key="fp"> пароль: </label>
         <input type="password" name="password" key="p"></input><br/>
-        <label htmlFor="repeatPassword" key="fr">repeat: </label>
+        <label htmlFor="repeatPassword" key="fr"> повтор пароля: </label>
         <input type="password" name="repeatPassword" key="r"></input><br/>
-        <button name="submitForm" className="submitForm" onClick={getRegistered}>Register</button>
-      </fieldset>
+        <button name="submitForm" className="submitForm" onClick={getRegistered}> Зарегистрироваться </button>
+      </>
     );
   }
 }
@@ -132,48 +133,80 @@ function getRegistered()
     axios.post('http://localhost:3001/register',{uname: username,
     umail: useremail,
     upassword: userpassword})
-    .then((res) => console.log(res.data.message))
+    .then((res) => inlineEdit("attentionRegText", res.data.message))
     .catch(err => console.log(err));
   }
-  else
-  {
-    console.log("failed to register");
-  }
+}
+
+function inlineEdit(fieldId, textMessage)
+{
+  document.getElementById(fieldId).innerText = textMessage;
 }
 
 function checkedData(uname, email, pass, repeatpass)
 {
+  let fid = "attentionRegText";
+
   if(uname.length < 3)
   {
+    inlineEdit(fid, "Имя должно быть не короче 3х символов");
     return false;
   }
   if(pass.length < 8)
   {
-    if(pass !== repeatpass)
-    {
-      return false;
-    }
+    inlineEdit(fid, "Пароль должен иметь длину не менее 8 символов");
+    return false;
+  }
+  if(pass !== repeatpass)
+  {
+    inlineEdit(fid, "Пароли не совпадают");
     return false;
   }
   if(!validator.isEmail(email))
   {
+    inlineEdit(fid, "Неверная почта");
     return false;
   }
 
   return true;
 }
+
+function getLogining()
+{
+  console.log("starting login");
+  const email = document.getElementsByName("email")[0].value;
+  const pass = document.getElementsByName("password")[0].value;
+  let lgn = "attentionLogText";
+  if(!validator.isEmail(email))
+  {
+    inlineEdit(lgn, "Неверная почта");
+    return false;
+  }
+  if(pass<8)
+  {
+    inlineEdit(lgn, "Неверный пароль(менее 8ми символов)");
+    return false;
+  }
+
+  axios.post('http://localhost:3001/login',{umail:email,
+    upassword:pass
+  })
+  .then(res => inlineEdit(lgn, res.data.message))
+  .catch(err => console.log(err));
+}
 class LoginField extends React.Component
 {
   render() {
     return(
-      <fieldset>
-        <legend>login</legend>
-        <label htmlFor="email">email: </label>
+      <>
+        <p> Вход </p>
+        <p id="attentionLogText"></p>
+        <label htmlFor="email"> почта: </label>
         <input type="email" name="email"></input><br/>
-        <label htmlFor="password">password: </label>
+        <label htmlFor="password"> пароль: </label>
         <input type="password" name="password"></input><br/>
-        <button name="submitForm" className="submitForm">Register</button>
-      </fieldset>
+        <button name="submitForm" className="submitForm" onClick={getLogining}> Войти </button>
+      </>
     );
   }
 }
