@@ -11,14 +11,12 @@ function MainMenuElements()
   // upper frame with buttons that represents play, forum and about links to go;
   
   elems[0] = (
-    <footer>
-      <div id="upperFrame">
+    <footer id="footer--main">
         <nav>
           <a href='/game-prepare'className="refButtons" key="p">Играть</a>|
           <a href='/' className="refButtons" key="f">Форум</a>|
           <a href='/about' className="refButtons" key="a">О проекте</a>
         </nav>
-      </div>
     </footer>
   );
   //main container with content loads dynamicly
@@ -102,6 +100,30 @@ class Toggle extends React.Component {
 
 class RegisterField extends React.Component
 {
+
+  constructor(props)
+  {
+    super(props);
+    this.getRegistered = this.getRegistered.bind(this);
+  }
+
+  getRegistered = function()
+  {
+    const username = document.getElementsByName("username")[0].value;
+    const useremail = document.getElementsByName("email")[0].value;
+    const userpassword = document.getElementsByName("password")[0].value;
+    const userRepeatPassword = document.getElementsByName("repeatPassword")[0].value;
+
+    if(checkedData(username, useremail, userpassword, userRepeatPassword))
+    {
+      axios.post('http://localhost:3001/register',{uname: username,
+      umail: useremail,
+      upassword: userpassword})
+      .then((res) => inlineEdit("attentionRegText", res.data.message))
+      .catch(err => console.log(err));
+    }
+  }
+
   render() {
     return(
       <>
@@ -115,28 +137,13 @@ class RegisterField extends React.Component
         <input type="password" name="password" key="p"></input><br/>
         <label htmlFor="repeatPassword" key="fr"> повтор пароля: </label>
         <input type="password" name="repeatPassword" key="r"></input><br/>
-        <button name="submitForm" className="submitForm" onClick={getRegistered}> Зарегистрироваться </button>
+        <button name="submitForm" className="submitForm" onClick={this.getRegistered}> Зарегистрироваться </button>
       </>
     );
   }
 }
 
-function getRegistered()
-{
-  const username = document.getElementsByName("username")[0].value;
-  const useremail = document.getElementsByName("email")[0].value;
-  const userpassword = document.getElementsByName("password")[0].value;
-  const userRepeatPassword = document.getElementsByName("repeatPassword")[0].value;
 
-  if(checkedData(username, useremail, userpassword, userRepeatPassword))
-  {
-    axios.post('http://localhost:3001/register',{uname: username,
-    umail: useremail,
-    upassword: userpassword})
-    .then((res) => inlineEdit("attentionRegText", res.data.message))
-    .catch(err => console.log(err));
-  }
-}
 
 function inlineEdit(fieldId, textMessage)
 {
@@ -171,31 +178,38 @@ function checkedData(uname, email, pass, repeatpass)
   return true;
 }
 
-function getLogining()
-{
-  console.log("starting login");
-  const email = document.getElementsByName("email")[0].value;
-  const pass = document.getElementsByName("password")[0].value;
-  let lgn = "attentionLogText";
-  if(!validator.isEmail(email))
-  {
-    inlineEdit(lgn, "Неверная почта");
-    return false;
-  }
-  if(pass<8)
-  {
-    inlineEdit(lgn, "Неверный пароль(менее 8ми символов)");
-    return false;
-  }
 
-  axios.post('http://localhost:3001/login',{umail:email,
-    upassword:pass
-  })
-  .then(res => inlineEdit(lgn, res.data.message))
-  .catch(err => console.log(err));
-}
 class LoginField extends React.Component
 {
+  constructor(props)
+  {
+    super(props);
+    this.getLogining = this.getLogining.bind(this);
+  }
+  getLogining = function()
+  {
+    console.log("starting login");
+    const email = document.getElementsByName("email")[0].value;
+    const pass = document.getElementsByName("password")[0].value;
+    let lgn = "attentionLogText";
+    if(!validator.isEmail(email))
+    {
+      inlineEdit(lgn, "Неверная почта");
+      return false;
+    }
+    if(pass<8)
+    {
+      inlineEdit(lgn, "Неверный пароль(менее 8ми символов)");
+      return false;
+    }
+
+    axios.post('http://localhost:3001/login',{umail:email,
+      upassword:pass
+    })
+    .then(res => inlineEdit(lgn, res.data.message))
+    .catch(err => console.log(err));
+  }
+
   render() {
     return(
       <>
@@ -205,7 +219,7 @@ class LoginField extends React.Component
         <input type="email" name="email"></input><br/>
         <label htmlFor="password"> пароль: </label>
         <input type="password" name="password"></input><br/>
-        <button name="submitForm" className="submitForm" onClick={getLogining}> Войти </button>
+        <button name="submitForm" className="submitForm" onClick={this.getLogining}> Войти </button>
       </>
     );
   }

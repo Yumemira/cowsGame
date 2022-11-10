@@ -1,0 +1,11 @@
+.post--container
+{
+    padding-left: 2%;
+    background-color: #555;
+    opacity: 0.9;
+    margin-top: 2%;
+}
+.post--container:hover
+{
+    background-color: #777;
+}
