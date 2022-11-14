@@ -6,9 +6,8 @@ import validator from "validator";
 
 function MainMenuElements()
 {
+  
   const elems = [3];
-  //TODO: container main with contents, container upperFrame, top-right account button
-  // upper frame with buttons that represents play, forum and about links to go;
   
   elems[0] = (
     <footer id="footer--main">
@@ -19,7 +18,6 @@ function MainMenuElements()
         </nav>
     </footer>
   );
-  //main container with content loads dynamicly
   elems[1] = (
     <main>
 
@@ -43,7 +41,6 @@ class Toggle extends React.Component {
       toggleButtonText: "Вход"
     };
 
-    // This binding is necessary to make `this` work in the callback
     this.handleClick = this.handleClick.bind(this);
     this.changeFieldset = this.changeFieldset.bind(this);
   }

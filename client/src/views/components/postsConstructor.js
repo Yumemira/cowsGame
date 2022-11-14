@@ -33,6 +33,8 @@ export default class PostConstructor extends React.Component
         let commentsList = <CommentConstructor authorProps={authorCreate} textData={textCom} />;
         return (<div className="post--comments-part">
             {commentsList}
+            <input type="text" name="comment--input" defaultValue="введите комментарий..."></input>
+            <button name="comment--send">{">>"}</button>
         </div>);
     }
 
@@ -73,8 +75,8 @@ export default class PostConstructor extends React.Component
             elem = (
                 <div className="post--container">
                     <div className="post--body" onClick={this.showPost}>
-                        <header className="post--title">{this.state.header}</header>
-                        <h1 className="post--tags">{this.state.hashTags}</h1>
+                        <h1 className="post--title">{this.state.header}</h1>
+                        <header className="post--tags">{this.state.hashTags}</header>
                         <p className="post--body">{this.state.text.substring(0,100) + "..."}</p>
                     </div>
                     <button className="post--button">Лайк</button>

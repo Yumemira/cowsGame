@@ -7,15 +7,30 @@ const { json } = require("body-parser");
 
 const app = express();
 const port = process.env.DEFAULT_PORT;
-
+var cathcedList = []
 
 app.use(express.urlencoded());
 app.use(cors({origin: process.env.REACT_FRONT_PATH}));
 app.use(express.json());
 
 
-// app.get()
+app.get("/pregeneratedId", function(req,res){
+  let numGenerated = 0;
+  while(!(numGenerated in cathcedList)){
+    numGenerated = parseInt(Math.random() * 1000000);
+  }
+  res.json({id:numGenerated});
+});
 
+app.post("/maintainceposts", function(req, res){
+  const currentId = req.body.currentId;
+  const maxId = currentId + 20;
+  tools.queryToDb(`select * from maintainceposts where "postID" >= '`+ currentId + `' and "postID" <= '` + maxId+ "'")
+  .then((ret) =>
+  {
+    res.json({list: ret});
+  });
+});
 
 app.post("/register",function(req, res){
   const uname = req.body.uname;
