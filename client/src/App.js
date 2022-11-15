@@ -3,19 +3,10 @@ import ForumMenu from './views/ForumMenuFrame';
 import AboutMenu from './views/AboutMenuFrame';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import React from 'react';
-import sessionLog, { generateLocalId } from './services/sessionLogs';
-var started = false;
-var currentUser = sessionLog;
 
 
 function App()
 {
-  if(!started)
-  {
-    generateLocalId(currentUser);
-    started = true;
-  }
-
   return (
   <Router>
     <div className="app-container">

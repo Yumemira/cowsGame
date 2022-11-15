@@ -1,11 +1,12 @@
 .post--container
 {
     padding-left: 2%;
-    background-color: #555;
+    background-color: rgb(255, 210, 155);
     opacity: 0.9;
     margin-top: 2%;
+    color: black;
 }
 .post--container:hover
 {
-    background-color: #777;
+    background-color: rgb(199, 143, 91);
 }

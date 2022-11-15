@@ -1,6 +1,7 @@
 body
 {
     background-image: url("./images/background.jpg");
+    background-size: cover;
 }
 #footer--main
 {
@@ -26,7 +27,8 @@ nav
     color: white;
 
     position: fixed;
-    left: 45%;
+    width:70%;
+    left: 30%;
 }
 
 main
@@ -42,24 +44,40 @@ main
 
 .refButtons
 {
+    width: 170px;
+    height: 30px;
     display: inline-block;
-    background-color: white;
+    background-image: url("./images/button--background.png");
+    background-size: 100% 100%;
+    padding-top: 1%;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-bottom: 2%;
     color: black;
+    margin-right: 2%;
+    text-align: center;
+    text-decoration: none;
 }
 
 .refButtons:hover
 {
-    background-color: gray;
+    background-image: url("./images/button--background-hover.png");
 }
 
 #inlineText
 {
     position: absolute;
-    background-color: white;
+    background-color: rgb(255, 227, 183);
     top:0%;
     right:0%;
     font-size: 24px;
     width: 10%;
+    z-index: 2;
+}
+
+#inlineText:hover
+{
+    background-color: rgb(205, 128, 69);
 }
 
 #loginMenu

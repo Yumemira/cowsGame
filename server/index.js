@@ -1,9 +1,8 @@
-const tools = require("./additionalFunctions.js");
 require("dotenv").config();
 
+const tools = require("./additionalFunctions.js");
 const express = require("express");
 const cors = require('cors');
-const { json } = require("body-parser");
 
 const app = express();
 const port = process.env.DEFAULT_PORT;
@@ -15,11 +14,11 @@ app.use(express.json());
 
 
 app.get("/pregeneratedId", function(req,res){
-  let numGenerated = 0;
-  while(!(numGenerated in cathcedList)){
-    numGenerated = parseInt(Math.random() * 1000000);
-  }
-  res.json({id:numGenerated});
+  res.json({id:cathcedList});
+});
+
+app.post("generatedId", function(req, res){
+  cathcedList[cathcedList.length] = req.body.id;
 });
 
 app.post("/maintainceposts", function(req, res){
@@ -47,11 +46,11 @@ app.post("/register",function(req, res){
       VALUES ('`+ uname + `', '`+ umail +`', '`+ upass +`');
       `);
 
-      res.json({message: "data was cathced"});
+      res.json({message: "Успешная регистрация"});
     }
     else
     {
-      res.json({message: "email has already been used!"});
+      res.json({message: "Эта почта уже занята"});
     }
   });
 

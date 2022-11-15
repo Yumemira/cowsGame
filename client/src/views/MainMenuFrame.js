@@ -12,8 +12,8 @@ function MainMenuElements()
   elems[0] = (
     <footer id="footer--main">
         <nav>
-          <a href='/game-prepare'className="refButtons" key="p">Играть</a>|
-          <a href='/' className="refButtons" key="f">Форум</a>|
+          <a href='/game-prepare'className="refButtons" key="p">Играть</a>
+          <a href='/' className="refButtons" key="f">Форум</a>
           <a href='/about' className="refButtons" key="a">О проекте</a>
         </nav>
     </footer>
@@ -116,7 +116,13 @@ class RegisterField extends React.Component
       axios.post('http://localhost:3001/register',{uname: username,
       umail: useremail,
       upassword: userpassword})
-      .then((res) => inlineEdit("attentionRegText", res.data.message))
+      .then((res) => {
+        inlineEdit("attentionRegText", res.data.message)
+        if(res.data.message === "successful register")
+        {
+
+        }
+    })
       .catch(err => console.log(err));
     }
   }
