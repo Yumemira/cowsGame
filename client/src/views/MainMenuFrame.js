@@ -79,7 +79,7 @@ class Toggle extends React.Component {
       const hrefLink = this.intoProfile();
       return (
         <div>
-          <button id="inlineText" href={hrefLink}>{"<< " + JSON.parse(localStorage.getItem("cow-bull--user-name"))}  </button>
+          <a id="inlineText" href={hrefLink}>{"<< " + JSON.parse(localStorage.getItem("cow-bull--name"))}  </a>
         </div>
       );
     }
