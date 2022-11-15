@@ -41,28 +41,34 @@ app.post("/register",function(req, res){
   .then((ret) => {
     if(ret.length === 0)
     {
+      const unicKey = tools.unicNumGenerator();
+
       tools.queryToDb(`
-      INSERT INTO userstable (name, email, password)
-      VALUES ('`+ uname + `', '`+ umail +`', '`+ upass +`');
+      INSERT INTO userstable (name, email, password, loginkey, state)
+      VALUES ('`+ uname + `', '`+ umail +`', '`+ upass +`', '` + unicKey +`', 'o');
       `);
 
-      res.json({message: "Успешная регистрация"});
+      tools.queryToDb(`select id from userstable where email = '` + umail + `' limit 1`)
+      .then(uret =>{
+        console.log(uret[0].id);
+        res.json({message: "Успешная регистрация", lkey: unicKey, success: true, userid: uret[0].id});
+      });
     }
     else
     {
-      res.json({message: "Эта почта уже занята"});
+      res.json({message: "Эта почта уже занята", success: false});
     }
   });
-
 });
 
 app.post("/login",function(req, res){
   const umail = req.body.umail;
   const upass = req.body.upassword;
+  const lkey = req.body.loginkey;
   
   console.log(upass);
 
-  tools.queryToDb(`select password from userstable where email = '` + umail + "' limit 1")
+  tools.queryToDb(`select password, loginkey from userstable where email = '` + umail + "' limit 1")
   .then((ret) => {
     if(ret.length === 0)
     {
@@ -76,7 +82,15 @@ app.post("/login",function(req, res){
       }
       else
       {
-        res.json({message: "Успешный вход"});
+        for(let i = 0; i < ret[0].loginkey.length; i++)
+        {
+          if(ret[0].loginkey[i] === lkey)
+          {
+            res.json({message: "Успешный вход"});
+          }
+        }
+        res.json({message: "Точка входа неизвестна",
+        requireMessage:"Пожалуйста, подтвердите новую точку входа"});
       }
     }
 

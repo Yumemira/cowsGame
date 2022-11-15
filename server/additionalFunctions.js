@@ -27,5 +27,10 @@ module.exports = {
                 resolve(res.rows);
             });
         });
+    },
+
+    unicNumGenerator: function()
+    {
+        return parseInt(Math.random()*1000000);
     }
 }

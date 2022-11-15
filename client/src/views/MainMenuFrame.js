@@ -43,12 +43,17 @@ class Toggle extends React.Component {
 
     this.handleClick = this.handleClick.bind(this);
     this.changeFieldset = this.changeFieldset.bind(this);
+    this.intoProfile = this.intoProfile.bind(this);
   }
 
   handleClick = () => {
     this.setState(prevState => ({
       isToggleOn: !prevState.isToggleOn
     }));
+  }
+
+  intoProfile = () => {
+    return "/profile?id=" + JSON.parse(localStorage.getItem("cow-bull--user-id"));
   }
 
   changeFieldset = () => {
@@ -69,6 +74,16 @@ class Toggle extends React.Component {
   }
 
   render() {
+    if(false|JSON.parse(localStorage.getItem("cow-bull--login-state")))
+    {
+      const hrefLink = this.intoProfile();
+      return (
+        <div>
+          <button id="inlineText" href={hrefLink}>{"<< " + JSON.parse(localStorage.getItem("cow-bull--user-name"))}  </button>
+        </div>
+      );
+    }
+
     let fieldSet;
 
     if(this.state.isRegisterOn)
@@ -79,19 +94,20 @@ class Toggle extends React.Component {
     {
       fieldSet = <LoginField />;
     }
+    
     return (
-      <div>
-        <button id="inlineText" onClick={this.handleClick}>{"<<"} Войти </button>
-        <section id="loginMenu" className={classnames("--visibled", {
-            "--hidden": !this.state.isToggleOn
-          })}>
-          <div id="logregField">
-            <input type='button' value={this.state.toggleButtonText} onClick={this.changeFieldset}></input>
-            {fieldSet}
-          </div>
-        </section>
-      </div>
-    );
+        <div>
+          <button id="inlineText" onClick={this.handleClick}>{"<<"} Войти </button>
+          <section id="loginMenu" className={classnames("--visibled", {
+              "--hidden": !this.state.isToggleOn
+            })}>
+            <div id="logregField">
+              <input type='button' value={this.state.toggleButtonText} onClick={this.changeFieldset}></input>
+              {fieldSet}
+            </div>
+          </section>
+        </div>
+      );
   }
 }
 
@@ -113,16 +129,25 @@ class RegisterField extends React.Component
 
     if(checkedData(username, useremail, userpassword, userRepeatPassword))
     {
+
       axios.post('http://localhost:3001/register',{uname: username,
       umail: useremail,
       upassword: userpassword})
       .then((res) => {
         inlineEdit("attentionRegText", res.data.message)
-        if(res.data.message === "successful register")
-        {
-
+        if(res.data.success)
+        {   
+          if(prompt("Сохранить данные для входа?"))
+          {
+            localStorage.setItem("cow-bull--name", JSON.stringify(username));
+            localStorage.setItem("cow-bull--email", JSON.stringify(useremail));
+          }
+          localStorage.setItem("cow-bull--user-id", JSON.stringify(res.data.userid));
+          localStorage.setItem("cow-bull--login-state", JSON.stringify(true));
+          localStorage.setItem("cow-bull--login-key", JSON.stringify(res.data.lkey));
+          window.location.reload();
         }
-    })
+      })
       .catch(err => console.log(err));
     }
   }
@@ -206,8 +231,9 @@ class LoginField extends React.Component
       return false;
     }
 
-    axios.post('http://localhost:3001/login',{umail:email,
-      upassword:pass
+    axios.post('http://localhost:3001/login',{umail: email,
+      upassword: pass,
+      lkey: localStorage.getItem("cow-bull--login-key")
     })
     .then(res => inlineEdit(lgn, res.data.message))
     .catch(err => console.log(err));
