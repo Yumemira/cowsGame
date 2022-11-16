@@ -61,6 +61,15 @@ app.post("/register",function(req, res){
   });
 });
 
+app.post("/profile", function(req, res){
+  const id = req.body.userid;
+  tools.queryToDb(`select name from userstable where id = '` + id + `' limit 1`)
+  .then((ret) => {
+    res.json({props:ret[0]});
+  })
+
+});
+
 app.post("/login",function(req, res){
   const umail = req.body.umail;
   const upass = req.body.upassword;
