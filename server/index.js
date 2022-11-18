@@ -65,7 +65,7 @@ app.post("/profile", function(req, res){
   const id = req.body.userid;
   tools.queryToDb(`select name from userstable where id = '` + id + `' limit 1`)
   .then((ret) => {
-    res.json({props:ret[0]});
+    res.json({props:ret[0].name});
   })
 
 });

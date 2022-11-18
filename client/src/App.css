@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+body
+{
+    background-image: url("../src/views/images/background.jpg");
+    background-size: cover;
+}

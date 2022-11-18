@@ -79,7 +79,7 @@ class Toggle extends React.Component {
       const hrefLink = this.intoProfile();
       return (
         <div>
-          <a id="inlineText" href={hrefLink}>{"<< " + JSON.parse(localStorage.getItem("cow-bull--name"))}  </a>
+          <a id="inlineText" href={hrefLink}>{JSON.parse(localStorage.getItem("cow-bull--name"))}  </a>
         </div>
       );
     }
@@ -97,7 +97,7 @@ class Toggle extends React.Component {
     
     return (
         <div>
-          <button id="inlineText" onClick={this.handleClick}>{"<<"} Войти </button>
+          <button id="inlineText" onClick={this.handleClick}> Войти </button>
           <section id="loginMenu" className={classnames("--visibled", {
               "--hidden": !this.state.isToggleOn
             })}>
