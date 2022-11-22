@@ -136,8 +136,8 @@ class RegisterField extends React.Component
       .then((res) => {
         inlineEdit("attentionRegText", res.data.message)
         if(res.data.success)
-        {   
-          if(prompt("Сохранить данные для входа?"))
+        {
+          if(window.confirm("Сохранить данные для входа?"))
           {
             localStorage.setItem("cow-bull--name", JSON.stringify(username));
             localStorage.setItem("cow-bull--email", JSON.stringify(useremail));
@@ -182,6 +182,42 @@ function checkedData(uname, email, pass, repeatpass)
 {
   let fid = "attentionRegText";
 
+  if(uname.length > 10)
+  {
+    inlineEdit(fid, "Имя должно быть не длиннее 10ти символов");
+    return false;
+  }
+  if(email.length > 50)
+  {
+    inlineEdit(fid, "Слишком длинный адрес почты");
+    return false;
+  }
+  if(pass.length > 30)
+  {
+    inlineEdit(fid, "Слишком длинный пароль");
+    return false;
+  }
+
+  let i = 0;
+  while(i < uname.length)
+  {
+    if(uname[i] === "<" || uname[i] === ">")
+    {
+      inlineEdit(fid, "Недопустимый символ в имени");
+      return false;
+    }
+    i++;
+  }
+  i = 0;
+  while(i < email.length)
+  {
+    if(email[i] === "<" || email[i] === ">")
+    {
+      inlineEdit(fid, "Недопустимый символ в почте");
+      return false;
+    }
+    i++;
+  }
   if(uname.length < 3)
   {
     inlineEdit(fid, "Имя должно быть не короче 3х символов");
@@ -225,11 +261,22 @@ class LoginField extends React.Component
       inlineEdit(lgn, "Неверная почта");
       return false;
     }
+    if(email.length>50)
+    {
+      inlineEdit(lgn, "Почта слишком длинная");
+      return false;
+    }
+    if(pass.length>30)
+    {
+      inlineEdit(lgn, "Неверный пароль(более 30ти символов)");
+      return false;
+    }
     if(pass<8)
     {
       inlineEdit(lgn, "Неверный пароль(менее 8ми символов)");
       return false;
     }
+    if(pass>30)
 
     axios.post('http://localhost:3001/login',{umail: email,
       upassword: pass,
