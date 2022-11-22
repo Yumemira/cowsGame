@@ -44,7 +44,7 @@ export default class ProfileMenu extends React.Component
             <a className="profile--button">Достижения</a>
         </div>);
         elem[3] = (<div className="profile--block">
-            <a href="#" className="profile--button">1000+...</a>
+            <a href="#" className="profile--button">1437 ДД...</a>
         </div>
         );
         elem[4] = (<div className="profile--block">

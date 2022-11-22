@@ -5,6 +5,7 @@ import ProfileMenu from './views/ProfileMenuFrame';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import React from 'react';
+import CreatePost from './views/CreatePostFrame';
 
 
 function App()
@@ -16,6 +17,7 @@ function App()
         <Route path="/" key="h" element={<ForumMenu />} />
         <Route path='/about' key="a" element={<AboutMenu />} />
         <Route path='/profile' key="p" element={<ProfileMenu />} />
+        <Route path='/new-post-create' key="n" element={<CreatePost />} />
       </Routes>
     </div>
   </Router>

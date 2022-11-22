@@ -15,6 +15,34 @@
     background-color: black;
 }
 
+.main--footer
+{
+    background-color: rgb(233, 189, 140);
+}
+
+#main--post-creator
+{
+    display: block;
+    width: 170px;
+    height: 30px;
+
+    
+    background-image: url("./images/button--name-background.png");
+    background-size: 100% 100%;
+    padding-top: 25px;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-bottom: 1%;
+    color: black;
+    margin-right: 2%;
+    text-align: center;
+    text-decoration: none;
+}
+
+#main--post-creator:hover
+{
+    background-image: url("./images/button--name-background-h.png");
+}
 
 nav
 {
