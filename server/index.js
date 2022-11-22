@@ -24,7 +24,17 @@ app.post("generatedId", function(req, res){
 app.post("/maintainceposts", function(req, res){
   const currentId = req.body.currentId;
   const maxId = currentId + 20;
-  tools.queryToDb(`select * from maintainceposts where "postID" >= '`+ currentId + `' and "postID" <= '` + maxId+ "'")
+  tools.queryToDb(`select * from maintainceposts where "postID" >= $1 and "postID" <= $2`,[currentId, maxId])
+  .then((ret) =>
+  {
+    res.json({list: ret});
+  });
+});
+
+app.post("/posts", function(req, res){
+  const currentId = req.body.currentId;
+  const maxId = currentId + 20;
+  tools.queryToDb(`select * from "Posts" where "postID" >= $1 and "postID" <= $2`,[currentId, maxId])
   .then((ret) =>
   {
     res.json({list: ret});
@@ -37,7 +47,7 @@ app.post("/register",function(req, res){
   const upass = req.body.upassword;
 
 
-  tools.queryToDb("select email from userstable where email = '" + umail + "' limit 1")
+  tools.queryToDb("select email from userstable where email = $1 limit 1", [umail])
   .then((ret) => {
     if(ret.length === 0)
     {
@@ -45,10 +55,9 @@ app.post("/register",function(req, res){
 
       tools.queryToDb(`
       INSERT INTO userstable (name, email, password, loginkey, state)
-      VALUES ('`+ uname + `', '`+ umail +`', '`+ upass +`', '` + unicKey +`', 'o');
-      `);
+      VALUES ($1,$2,$3,$4, 'o');`, [uname,umail,upass,unicKey]);
 
-      tools.queryToDb(`select id from userstable where email = '` + umail + `' limit 1`)
+      tools.queryToDb(`select id from userstable where email = $1 limit 1`,[umail])
       .then(uret =>{
         console.log(uret[0].id);
         res.json({message: "Успешная регистрация", lkey: unicKey, success: true, userid: uret[0].id});
@@ -63,7 +72,7 @@ app.post("/register",function(req, res){
 
 app.post("/profile", function(req, res){
   const id = req.body.userid;
-  tools.queryToDb(`select name from userstable where id = '` + id + `' limit 1`)
+  tools.queryToDb(`select name from userstable where id = $1 limit 1`,[id])
   .then((ret) => {
     res.json({props:ret[0].name});
   })
@@ -77,32 +86,36 @@ app.post("/login",function(req, res){
   
   console.log(upass);
 
-  tools.queryToDb(`select password, loginkey from userstable where email = '` + umail + "' limit 1")
+  tools.queryToDb(`select password, loginkey from userstable where email = $1 limit 1`, [umail])
   .then((ret) => {
-    if(ret.length === 0)
+    if(ret.length === 0||ret[0].password !== upass)
     {
       res.json({message: "Невереный логин или пароль"});
     }
     else
     {
-      if(ret[0].password !== upass)
+      for(let i = 0; i < ret[0].loginkey.length; i++)
       {
-        res.json({message: "неверный логин или пароль"});
-      }
-      else
-      {
-        for(let i = 0; i < ret[0].loginkey.length; i++)
+        if(ret[0].loginkey[i] === lkey)
         {
-          if(ret[0].loginkey[i] === lkey)
-          {
-            res.json({message: "Успешный вход"});
-          }
+          res.json({message: "Успешный вход"});
         }
-        res.json({message: "Точка входа неизвестна",
-        requireMessage:"Пожалуйста, подтвердите новую точку входа"});
       }
+      res.json({message: "Точка входа неизвестна",
+      requireMessage:"Пожалуйста, подтвердите новую точку входа"});
     }
+  });
+});
 
+app.post("/add-new-post", function(req,res){
+  const reqData = req.body;
+  tools.queryToDb(`insert into "Posts" (data, postname, userid, username)
+  values ($1,$2,$3,$4)`, [reqData.text, reqData.title, reqData.uid, reqData.author])
+  .then(ret =>{
+    res.json({message:"success"});
+  })
+  .catch(err => {
+    res.json({message:"Что-то пошло не так.."});
   });
 });
 

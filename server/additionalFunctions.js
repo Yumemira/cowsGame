@@ -1,7 +1,7 @@
 const { Client } = require("pg");
 
 module.exports = {
-    queryToDb: function(que)
+    queryToDb: function(que, params)
     {
         const client = new Client({
             user: 'commonmanager',
@@ -16,7 +16,7 @@ module.exports = {
         return new Promise(function (resolve, reject){
             client.connect();
 
-            client.query(que, (err, res) => {
+            client.query(que, params, (err, res) => {
                 if (err)
                 {
                     console.error(err);

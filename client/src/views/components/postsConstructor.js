@@ -12,9 +12,9 @@ export default class PostConstructor extends React.Component
             isOpened: false,
             isComments: false,
             header: this.props.titleName,
-            hashTags: this.props?.postHashTags,
             text: this.props.textData,
             author: this.props?.textAuthor,
+            authorId:this.props?.authorId,
             comments: []
         };
         this.showPost = this.showPost.bind(this);

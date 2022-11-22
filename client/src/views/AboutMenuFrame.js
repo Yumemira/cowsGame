@@ -24,10 +24,8 @@ export default class AboutMenu extends React.Component
     for(let i = 0; i < this.state.data.length; i++)
     {
       let el = this.state.data[i];
-      elem[i] = (<PostConstructor key={el.postID} idPost={el.postID} titleName={el.title} postHashTags={el.hashtags} textData={el.data} textAuthor={el.author}/>);
+      elem[i] = (<PostConstructor key={el.postID} idPost={el.postID} titleName={el.title} textData={el.data} textAuthor={el.author}/>);
     }
-    
-//    console.log(elem);
     return elem;
   }
 
