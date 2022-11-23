@@ -31,23 +31,24 @@ export default class ProfileMenu extends React.Component
     }
 
     profileGenerator = () => {
-        const elem = [5];
-        elem[0] = (<div className="profile--block">
+        const elem = [6];
+        elem[0] = (<div className="profile--block"><p id="main--header">Профиль</p></div>);
+        elem[1] = (<div className="profile--block">
             <p id="profile--user-name">{this.state.uname}</p>
         </div>);
-        elem[1] = (<div className="profile--block">
+        elem[2] = (<div className="profile--block">
             <a className="profile--button">Добавить в друзья</a>
             <a className="profile--button">Написать сообщение</a>
         </div>
         );
-        elem[2] = (<div className="profile--block">
+        elem[3] = (<div className="profile--block">
             <a className="profile--button">Достижения</a>
         </div>);
-        elem[3] = (<div className="profile--block">
+        elem[4] = (<div className="profile--block">
             <a href="#" className="profile--button">1437 ДД...</a>
         </div>
         );
-        elem[4] = (<div className="profile--block">
+        elem[5] = (<div className="profile--block">
             <a href="#" className="profile--button">Отсутствует</a>
         </div>);
 

@@ -1,6 +1,6 @@
 .about--main
 {
-    color: white;
+    color: black;
 }
 
 .main--container-frame
@@ -12,4 +12,9 @@
     left: 0px;
     background-color: black;
     opacity: 0.9;
+}
+
+.about--block
+{
+    background-color: rgb(233, 189, 140);
 }

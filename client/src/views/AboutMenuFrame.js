@@ -54,6 +54,7 @@ export default class AboutMenu extends React.Component
 
     elems[1] = (
         <main className="about--main">
+          <div className="about--block"><p id="about--footer">О проекте</p></div>
           {
             this.setList()
           }

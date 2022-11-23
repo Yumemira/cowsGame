@@ -37,7 +37,7 @@ class ForumMenu extends React.Component
     for(let i = 0; i < this.state.data.length; i++)
     {
       let el = this.state.data[i];
-      elem[i] = (<PostConstructor key={el.postID} idPost={el.postID} titleName={el.title} textData={el.data} textAuthor={el.author} authorId={el.userid}/>);
+      elem[i] = (<PostConstructor key={el.postID} idPost={el.postID} titleName={el.postname} textData={el.data} textAuthor={el.username} authorId={el.userid}/>);
     }
     return elem;
   }
