@@ -1,6 +1,7 @@
 import React from "react";
 import './postStyle.css';
 import CommentConstructor from "./commentsConstructor";
+import axios from "axios";
 
 export default class PostConstructor extends React.Component
 {
@@ -8,34 +9,65 @@ export default class PostConstructor extends React.Component
     {
         super(props);
         this.state = {
-            id: this.props.postId,
+            id: this.props.idPost,
             isOpened: false,
             isComments: false,
             header: this.props.titleName,
             text: this.props.textData,
             author: this.props?.textAuthor,
             authorId:this.props?.authorId,
+            socket: this.props.setSocket,
             comments: []
         };
         this.showPost = this.showPost.bind(this);
-        this.GetComments = this.GetComments.bind(this);
+        this.commentSend = this.commentSend.bind(this);
         this.showComms = this.showComms.bind(this);
+        this.openComms = this.openComms.bind(this);
+        this.fetchingComments = this.fetchingComments.bind(this);
     }
 
-    GetComments = function(comProp)
+    fetchingComments = function()
     {
-        let authorCreate = {
-            name: "David",
-            id: comProp.postId
-        };
-        let textCom = "helloThere";
+        
+    }
 
-        let commentsList = <CommentConstructor authorProps={authorCreate} textData={textCom} />;
-        return (<div className="post--comments-part">
-            {commentsList}
-            <input type="text" name="comment--input" defaultValue="введите комментарий..."></input>
-            <button name="comment--send">{">>"}</button>
-        </div>);
+    commentSend = () => {
+        const dataList = {
+            postId: this.state.id,
+            id: localStorage.getItem("cow-bull--user-id"),
+            textData: document.getElementById("comment--data").value,
+            author: localStorage.getItem("cow-bull--name")
+        }
+
+        axios.post("http://localhost:3001/comment--send", dataList)
+        .then((res) => {
+            if(res.data.message==="success")
+            {
+                //TODO: Rerender comments while open
+            }
+        })
+    }
+
+    openComms = function(){
+        if(this.state.isComments)
+        {
+            const userProps = {
+                postId: this.state.id,
+                username:localStorage.getItem("cow-bull--name"),
+                userId: localStorage.getItem("cow-bull--user-id")
+            };
+//                this.state.socket.emit('chat_enable',userProps);
+            console.log(this.state.comments);
+            return (<div className="post--comments-part">
+                {this.state.comments}
+                <input type="text" name="comment--input" id="comment--data" defaultValue="введите комментарий..."></input>
+                <button name="comment--send" onClick={this.commentSend}>{">>"}</button>
+            </div>);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     showPost = function()
@@ -47,13 +79,49 @@ export default class PostConstructor extends React.Component
 
     showComms = function()
     {
-        this.setState(prevState => ({
-            isComments:!prevState.isComments
-        }));
+        if(!this.state.isComments)
+        {
+            axios.post("http://localhost:3001/comments-fetch", {postId: this.state.id})
+            .then((res) => {
+                console.log(res.data.comList);
+                if(res.data.message === "success")
+                {
+                    
+                    let commentList = [res.data.comList.length];
+                    for(let i = 0; i < res.data.comList.length; i++)
+                    {
+                        const authProps = {
+                            name: res.data.comList[i].username,
+                            id: res.data.comList[i].userid
+                        }
+                        console.log(res.data.comList);
+                        commentList[i] = (<CommentConstructor authorProps={authProps} textData={res.data.comList[i].data} />);
+                    }
+                    this.setState(() => ({
+                        comments: commentList,
+                        isComments:true
+                    }));
+                    console.log(commentList);
+                }
+                else
+                {
+                    this.setState(() => ({
+                        isComments: true
+                    }));
+                }
+            });
+        }
+        else
+        {
+            this.setState(() => ({
+                isComments: false
+            }));
+        }
     }
 
     render()
     {
+        const commentList = this.openComms()
         var elem;
         if(this.state.isOpened)
         {
@@ -66,7 +134,7 @@ export default class PostConstructor extends React.Component
                     </div>
                     <button className="post--button">Лайк</button>
                     <button className="post--button" onClick={this.showComms}>Комм</button>
-                    {this.state.isComments ? <this.GetComments postId='1'/> : null}
+                    {commentList}
                 </div>
                 );
         }
@@ -81,7 +149,7 @@ export default class PostConstructor extends React.Component
                     </div>
                     <button className="post--button">Лайк</button>
                     <button className="post--button" onClick={this.showComms}>Комм</button>
-                    {this.state.isComments ? <this.GetComments postId='1'/> : null}
+                    {commentList}
                 </div>
                 );
         }

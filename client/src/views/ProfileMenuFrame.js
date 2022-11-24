@@ -37,12 +37,12 @@ export default class ProfileMenu extends React.Component
             <p id="profile--user-name">{this.state.uname}</p>
         </div>);
         elem[2] = (<div className="profile--block">
-            <a className="profile--button">Добавить в друзья</a>
-            <a className="profile--button">Написать сообщение</a>
+            <a href="" className="profile--button">Добавить в друзья</a>
+            <a href="" className="profile--button">Написать сообщение</a>
         </div>
         );
         elem[3] = (<div className="profile--block">
-            <a className="profile--button">Достижения</a>
+            <a href="" className="profile--button">Достижения</a>
         </div>);
         elem[4] = (<div className="profile--block">
             <a href="#" className="profile--button">1437 ДД...</a>

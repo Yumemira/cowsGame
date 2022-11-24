@@ -13,6 +13,7 @@ class ForumMenu extends React.Component
       uid:"",
       minId: 0,
       bottomPost: false,
+      socket: this.props.getSocket,
       data: {}
     }
     this.postCreateLink = this.postCreateLink.bind(this);
@@ -37,7 +38,7 @@ class ForumMenu extends React.Component
     for(let i = 0; i < this.state.data.length; i++)
     {
       let el = this.state.data[i];
-      elem[i] = (<PostConstructor key={el.postID} idPost={el.postID} titleName={el.postname} textData={el.data} textAuthor={el.username} authorId={el.userid}/>);
+      elem[i] = (<PostConstructor setSocket={this.state.socket} key={el.postID} idPost={el.postID} titleName={el.postname} textData={el.data} textAuthor={el.username} authorId={el.userid}/>);
     }
     return elem;
   }

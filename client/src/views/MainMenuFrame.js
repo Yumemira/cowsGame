@@ -139,9 +139,12 @@ class RegisterField extends React.Component
         {
           if(window.confirm("Сохранить данные для входа?"))
           {
-            localStorage.setItem("cow-bull--name", JSON.stringify(username));
-            localStorage.setItem("cow-bull--email", JSON.stringify(useremail));
+            localStorage.setItem("cow-bull--prefemail", JSON.stringify(useremail));
           }
+          
+          localStorage.setItem("cow-bull--name", JSON.stringify(username));
+          localStorage.setItem("cow-bull--email", JSON.stringify(useremail));
+
           localStorage.setItem("cow-bull--user-id", JSON.stringify(res.data.userid));
           localStorage.setItem("cow-bull--login-state", JSON.stringify(true));
           localStorage.setItem("cow-bull--login-key", JSON.stringify(res.data.lkey));
@@ -292,7 +295,7 @@ class LoginField extends React.Component
         <p> Вход </p>
         <p id="attentionLogText"></p>
         <label htmlFor="email"> почта: </label>
-        <input type="email" name="email"></input><br/>
+        <input type="email" name="email" defaultValue={localStorage.getItem("cow-bull--prefemail")}></input><br/>
         <label htmlFor="password"> пароль: </label>
         <input type="password" name="password"></input><br/>
         <button name="submitForm" className="submitForm" onClick={this.getLogining}> Войти </button>
