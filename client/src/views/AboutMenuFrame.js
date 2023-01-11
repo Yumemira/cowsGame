@@ -12,6 +12,7 @@ export default class AboutMenu extends React.Component
     this.state = {
       minId: 0,
       bottomPost: false,
+      socket: this.props.socket,
       data: {}
     };
     this.setList = this.setList.bind(this);
@@ -24,7 +25,7 @@ export default class AboutMenu extends React.Component
     for(let i = 0; i < this.state.data.length; i++)
     {
       let el = this.state.data[i];
-      elem[i] = (<PostConstructor key={el.postID} idPost={el.postID} titleName={el.title} textData={el.data} textAuthor={el.author}/>);
+      elem[i] = (<PostConstructor key={el.postID} idPost={el.postID} titleName={el.title} textData={el.data} textAuthor={el.author} socket={this.state.socket}/>);
     }
     return elem;
   }

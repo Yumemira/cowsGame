@@ -26,8 +26,20 @@ io.on('connection', (socket) => {
   console.log(`User connected ${socket.id}`);
   
   socket.on('join_room', (data) => {
-    const { username, room } = data; // Data sent from client when join_room event emitted
+    const { userid, room } = data; // Data sent from client when join_room event emitted
+    console.log(`User connected ${userid}`);
     socket.join(room); // Join the user to a socket room
+  });
+
+  socket.on('send_comment', (data) => {
+    const {comment, room} = data;
+    socket.to(room).emit('update_comments', comment);
+  });
+
+  socket.on('leave_room', (data) => {
+    const { userid, room } = data;
+    socket.leave(room);
+    console.log(`user ${userid} has left the room`);
   });
   // We can write our socket event listeners in here...
 });
@@ -62,9 +74,23 @@ app.post("/posts", function(req, res){
 });
 
 app.post("/comment--send", function(req, res){
-  console.log(req.body);
-  tools.queryToDb(`insert into "Comments" ("postID", data, username, userid)
-    values ($1, $2, $3, $4)`, [ req.body.postId, req.body.textData, req.body.author, req.body.id])
+  let datestamp = new Date();
+  tools.queryToDb(`insert into "Comments" ("postID", data, username, userid, date)
+    values ($1, $2, $3, $4, $5)`, [ req.body.postId, req.body.textData, req.body.author, req.body.id, datestamp])
+    .then(() => {
+      tools.queryToDb(`select "commentID" from "Comments" where userid = $1 and date = $2`,[req.body.id, datestamp])
+      .then(ret => {
+        res.json({comId:ret[0].commentID, message: "success"});
+      });
+    });
+});
+
+app.post("/comment-fetch", function(req, res){
+  const commentId = req.body.commentId
+  tools.queryToDb(`select userid, username, data from "Comments" where "commentID" = $1`,[commentId])
+  .then(ret => {
+    res.json({comment: ret[0]});
+  })
 });
 
 app.post("/comments-fetch", function(req, res){

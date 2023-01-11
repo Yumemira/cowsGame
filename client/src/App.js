@@ -17,8 +17,8 @@ function App()
   <Router>
     <div className="app-container">
       <Routes>
-        <Route path="/" key="h" element={<ForumMenu setSocket={socket} />} />
-        <Route path='/about' key="a" element={<AboutMenu />} />
+        <Route path="/" key="h" element={<ForumMenu socket={socket}  />} />
+        <Route path='/about' key="a" element={<AboutMenu socket={socket}/>} />
         <Route path='/profile' key="p" element={<ProfileMenu />} />
         <Route path='/new-post-create' key="n" element={<CreatePost />} />
       </Routes>

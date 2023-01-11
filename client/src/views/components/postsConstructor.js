@@ -16,20 +16,18 @@ export default class PostConstructor extends React.Component
             text: this.props.textData,
             author: this.props?.textAuthor,
             authorId:this.props?.authorId,
-            socket: this.props.setSocket,
+            socket: this.props.socket,
             comments: []
         };
-        this.showPost = this.showPost.bind(this);
-        this.commentSend = this.commentSend.bind(this);
-        this.showComms = this.showComms.bind(this);
-        this.openComms = this.openComms.bind(this);
-        this.fetchingComments = this.fetchingComments.bind(this);
+        this.showPost = this.showPost.bind(this)
+        this.commentSend = this.commentSend.bind(this)
+        this.showComms = this.showComms.bind(this)
+        this.openComms = this.openComms.bind(this)
+        this.joinRoom = this.joinRoom.bind(this)
+        this.fetchComms = this.fetchComms.bind(this)
+        this.fetchComment = this.fetchComment.bind(this)
     }
 
-    fetchingComments = function()
-    {
-        
-    }
 
     commentSend = () => {
         const dataList = {
@@ -43,9 +41,44 @@ export default class PostConstructor extends React.Component
         .then((res) => {
             if(res.data.message==="success")
             {
-                //TODO: Rerender comments while open
+                this.updateComms(res.data.comId);
             }
         })
+    }
+
+    
+    joinRoom = () => {
+        this.state.socket.emit('join_room', { userid: localStorage.getItem("cow-bull--user-id"), room: this.state.id });
+    }
+    
+    leaveRoom = () => {
+        this.state.socket.emit('leave_room', { userid: localStorage.getItem("cow-bull--user-id"), room: this.state.id });
+    }
+
+    updateComms = (comId) => {
+        this.state.socket.emit('send_comment', { commentid: comId, room: this.state.id });    
+    }
+
+    fetchComms = () => {
+        this.state.socket.on('update_comments', (res) => {
+            const {commentId} = res
+            this.fetchComment()
+        });
+    }
+
+    fetchComment = (commentId) => {
+        axios.post("http://localhost:3001/comment-fetch", commentId)
+            .then((ares) => {
+                const {comm} = ares.data.comment
+                const authProps = {
+                    name: comm.username,
+                    id: comm.userid
+                }
+                let addedComm = (<CommentConstructor authorProps={authProps} textData={comm.data} />);
+
+                this.state.comments = this.state.comments.concat(addedComm)
+            });
+            
     }
 
     openComms = function(){
@@ -56,8 +89,8 @@ export default class PostConstructor extends React.Component
                 username:localStorage.getItem("cow-bull--name"),
                 userId: localStorage.getItem("cow-bull--user-id")
             };
-//                this.state.socket.emit('chat_enable',userProps);
-            console.log(this.state.comments);
+            
+
             return (<div className="post--comments-part">
                 {this.state.comments}
                 <input type="text" name="comment--input" id="comment--data" defaultValue="введите комментарий..."></input>
@@ -81,9 +114,10 @@ export default class PostConstructor extends React.Component
     {
         if(!this.state.isComments)
         {
+            this.joinRoom()
+
             axios.post("http://localhost:3001/comments-fetch", {postId: this.state.id})
             .then((res) => {
-                console.log(res.data.comList);
                 if(res.data.message === "success")
                 {
                     
@@ -94,14 +128,12 @@ export default class PostConstructor extends React.Component
                             name: res.data.comList[i].username,
                             id: res.data.comList[i].userid
                         }
-                        console.log(res.data.comList);
                         commentList[i] = (<CommentConstructor authorProps={authProps} textData={res.data.comList[i].data} />);
                     }
                     this.setState(() => ({
                         comments: commentList,
                         isComments:true
                     }));
-                    console.log(commentList);
                 }
                 else
                 {
@@ -110,9 +142,11 @@ export default class PostConstructor extends React.Component
                     }));
                 }
             });
+
         }
         else
         {
+            this.leaveRoom()
             this.setState(() => ({
                 isComments: false
             }));
@@ -150,6 +184,7 @@ export default class PostConstructor extends React.Component
                     <button className="post--button">Лайк</button>
                     <button className="post--button" onClick={this.showComms}>Комм</button>
                     {commentList}
+                    
                 </div>
                 );
         }
