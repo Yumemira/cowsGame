@@ -24,7 +24,7 @@ export default class CreatePost extends React.Component
             uid: this.state.uid,
             title: document.getElementById("post--title").value,
             text: document.getElementById("post--body").value,
-            author: localStorage.getItem("cow-bull--name")
+            author: JSON.parse(localStorage.getItem("cow-bull--name"))
         };
 
         let i = 0;
@@ -65,11 +65,11 @@ export default class CreatePost extends React.Component
         }
         if(data.author)
         {
-            axios.post("http://localhost:3001/add-new-post",data)
+            axios.post("http://192.168.1.6:3001/add-new-post",data)
             .then(res => {
                     if(res.data.message === "success")
                     {
-                        window.location.assign('http://localhost:3000');
+                        window.location.assign('http://192.168.1.6:3000');
                     }
                     else
                     {

@@ -8,7 +8,7 @@ import React from 'react';
 import CreatePost from './views/CreatePostFrame';
 import io from 'socket.io-client';
 
-const socket = io.connect('http://localhost:3001');
+const socket = io.connect('http://192.168.1.6:3001');
 
 
 function App()

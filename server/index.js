@@ -17,7 +17,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin:"http://localhost:3000",
+    origin:"http://192.168.1.6:3000",
     methods: ['GET', 'POST']
   },
 });
@@ -26,13 +26,14 @@ io.on('connection', (socket) => {
   console.log(`User connected ${socket.id}`);
   
   socket.on('join_room', (data) => {
-    const { userid, room } = data; // Data sent from client when join_room event emitted
-    console.log(`User connected ${userid}`);
-    socket.join(room); // Join the user to a socket room
+    const { userid, room } = data;
+    console.log(`User connected ${userid} to ${room} room`);
+    socket.join(room);
   });
 
   socket.on('send_comment', (data) => {
     const {comment, room} = data;
+    console.log("comment was sended");
     socket.to(room).emit('update_comments', comment);
   });
 
@@ -41,7 +42,6 @@ io.on('connection', (socket) => {
     socket.leave(room);
     console.log(`user ${userid} has left the room`);
   });
-  // We can write our socket event listeners in here...
 });
 
 
@@ -75,18 +75,31 @@ app.post("/posts", function(req, res){
 
 app.post("/comment--send", function(req, res){
   let datestamp = new Date();
-  tools.queryToDb(`insert into "Comments" ("postID", data, username, userid, date)
-    values ($1, $2, $3, $4, $5)`, [ req.body.postId, req.body.textData, req.body.author, req.body.id, datestamp])
-    .then(() => {
-      tools.queryToDb(`select "commentID" from "Comments" where userid = $1 and date = $2`,[req.body.id, datestamp])
-      .then(ret => {
-        res.json({comId:ret[0].commentID, message: "success"});
-      });
-    });
+  tools.queryToDb(`select loginkey from userstable where id = $1 limit 1`,[req.body.id])
+  .then(ret => {
+    if(ret[0].loginkey === req.body.valid)
+    {
+      tools.queryToDb(`insert into "Comments" ("postID", data, username, userid, date)
+      values ($1, $2, $3, $4, $5)`, [ req.body.postId, req.body.textData, req.body.author, req.body.id, datestamp])
+      .then(() => {
+        tools.queryToDb(`select "commentID" from "Comments" where userid = $1 and date = $2`,[req.body.id, datestamp])
+        .then(ret => {
+          res.json({comId:ret[0].commentID, message: "success"});
+        });
+      });  
+    }
+    else
+    {
+      console.log(ret[0].loginkey)
+      console.log(req.body.valid)
+      res.json({message: "error"})
+    }
+  })
 });
 
 app.post("/comment-fetch", function(req, res){
   const commentId = req.body.commentId
+  console.log(commentId)
   tools.queryToDb(`select userid, username, data from "Comments" where "commentID" = $1`,[commentId])
   .then(ret => {
     res.json({comment: ret[0]});
@@ -125,8 +138,9 @@ app.post("/register",function(req, res){
       VALUES ($1,$2,$3,$4, 'o');`, [uname, umail, upass, unicKey]);
 
       tools.queryToDb(`select id from userstable where email = $1 limit 1`,[umail])
-      .then(uret =>{
-        console.log(uret[0].id);
+      .then(uret => {
+        let tid = uret[0].id
+        tid = parseInt(tid)
         res.json({message: "Успешная регистрация", lkey: unicKey, success: true, userid: uret[0].id});
       });
     }
@@ -150,10 +164,8 @@ app.post("/login",function(req, res){
   const umail = req.body.umail;
   const upass = req.body.upassword;
   const lkey = req.body.loginkey;
-  
-  console.log(upass);
 
-  tools.queryToDb(`select password, loginkey from userstable where email = $1 limit 1`, [umail])
+  tools.queryToDb(`select id, password, loginkey, name from userstable where email = $1 limit 1`, [umail])
   .then((ret) => {
     if(ret.length === 0||ret[0].password !== upass)
     {
@@ -161,15 +173,20 @@ app.post("/login",function(req, res){
     }
     else
     {
-      for(let i = 0; i < ret[0].loginkey.length; i++)
+      console.log(`Id of user is: ${ret[0].id}`)
+      console.log(`Login key is ${ret[0].loginkey}`)
+      
+      if(ret[0].loginkey === lkey)
       {
-        if(ret[0].loginkey[i] === lkey)
-        {
-          res.json({message: "Успешный вход"});
-        }
+        res.json({uid: ret[0].id, name: ret[0].name, message: "Успешный вход", lkey: ret[0].loginkey});
       }
-      res.json({message: "Точка входа неизвестна",
-      requireMessage:"Пожалуйста, подтвердите новую точку входа"});
+      else
+      {
+        
+        res.json({/*message: "Точка входа неизвестна"*/ message: "Успешный вход",
+        requireMessage:"Пожалуйста, подтвердите новую точку входа",
+        uid: ret[0].id, name: ret[0].name, lkey: ret[0].loginkey});    
+      }
     }
   });
 });
@@ -187,6 +204,6 @@ app.post("/add-new-post", function(req,res){
 });
 
 
-server.listen(port, () => {
+server.listen(port,'192.168.1.6', () => {
   console.log(`Server listening on ${port}`);
 });

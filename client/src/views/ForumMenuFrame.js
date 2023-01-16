@@ -50,7 +50,7 @@ class ForumMenu extends React.Component
       uid: id
     });
 
-    axios.post("http://localhost:3001/posts", {currentId: this.state.minId})
+    axios.post("http://192.168.1.6:3001/posts", {currentId: this.state.minId})
     .then(res => {
       if(res.data.list.length < 20)
       {

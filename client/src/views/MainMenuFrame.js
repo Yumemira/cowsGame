@@ -130,7 +130,7 @@ class RegisterField extends React.Component
     if(checkedData(username, useremail, userpassword, userRepeatPassword))
     {
 
-      axios.post('http://localhost:3001/register',{uname: username,
+      axios.post('http://192.168.1.6:3001/register',{uname: username,
       umail: useremail,
       upassword: userpassword})
       .then((res) => {
@@ -223,7 +223,7 @@ function checkedData(uname, email, pass, repeatpass)
   }
   if(uname.length < 3)
   {
-    inlineEdit(fid, "Имя должно быть не короче 3х символов");
+    inlineEdit(fid, "Имя должно быть не короче трёх символов");
     return false;
   }
   if(pass.length < 8)
@@ -255,10 +255,10 @@ class LoginField extends React.Component
   }
   getLogining = function()
   {
-    console.log("starting login");
     const email = document.getElementsByName("email")[0].value;
     const pass = document.getElementsByName("password")[0].value;
     let lgn = "attentionLogText";
+
     if(!validator.isEmail(email))
     {
       inlineEdit(lgn, "Неверная почта");
@@ -274,18 +274,30 @@ class LoginField extends React.Component
       inlineEdit(lgn, "Неверный пароль(более 30ти символов)");
       return false;
     }
-    if(pass<8)
+    if(pass.length<8)
     {
       inlineEdit(lgn, "Неверный пароль(менее 8ми символов)");
       return false;
     }
-    if(pass>30)
 
-    axios.post('http://localhost:3001/login',{umail: email,
+    axios.post('http://192.168.1.6:3001/login',{umail: email,
       upassword: pass,
-      lkey: localStorage.getItem("cow-bull--login-key")
+      lkey: JSON.parse(localStorage.getItem("cow-bull--login-key"))
     })
-    .then(res => inlineEdit(lgn, res.data.message))
+    .then(res => {
+      inlineEdit(lgn, res.data.message)
+      if(window.confirm("Сохранить данные для входа?"))
+      {
+        localStorage.setItem("cow-bull--prefemail", JSON.stringify(email));
+      }      
+      localStorage.setItem("cow-bull--name", JSON.stringify(res.data.name));
+      localStorage.setItem("cow-bull--email", JSON.stringify(email));
+      localStorage.setItem("cow-bull--user-id", JSON.stringify(res.data.uid));
+      localStorage.setItem("cow-bull--login-state", JSON.stringify(true));
+      localStorage.setItem("cow-bull--login-key", JSON.stringify(res.data.lkey)); // необходимо изменить позднее в функцию валидации логина
+
+      window.location.reload();
+    })
     .catch(err => console.log(err));
   }
 
@@ -295,7 +307,7 @@ class LoginField extends React.Component
         <p> Вход </p>
         <p id="attentionLogText"></p>
         <label htmlFor="email"> почта: </label>
-        <input type="email" name="email" defaultValue={localStorage.getItem("cow-bull--prefemail")}></input><br/>
+        <input type="email" name="email" defaultValue={JSON.parse(localStorage.getItem("cow-bull--prefemail"))}></input><br/>
         <label htmlFor="password"> пароль: </label>
         <input type="password" name="password"></input><br/>
         <button name="submitForm" className="submitForm" onClick={this.getLogining}> Войти </button>

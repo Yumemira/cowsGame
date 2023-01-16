@@ -19,10 +19,11 @@ export default class ProfileMenu extends React.Component
         }
         this.getUserProps = this.getUserProps.bind(this);
         this.profileGenerator = this.profileGenerator.bind(this);
+        this.logoutUser = this.logoutUser.bind(this);  
     }
 
     getUserProps = (id) => {
-        axios.post("http://localhost:3001/profile", {userid:id})
+        axios.post("http://192.168.1.6:3001/profile", {userid:id})
         .then((res) => {
             this.setState(() => ({
                 uname: res.data.props
@@ -30,8 +31,17 @@ export default class ProfileMenu extends React.Component
         });
     }
 
+    logoutUser = () => {
+    localStorage.removeItem("cow-bull--name");
+    localStorage.removeItem("cow-bull--email");
+    localStorage.removeItem("cow-bull--user-id");
+    localStorage.removeItem("cow-bull--login-state");
+    localStorage.removeItem("cow-bull--login-key");
+    // отправлять на главную страничку после выхода
+    }
+
     profileGenerator = () => {
-        const elem = [6];
+        const elem = [7];
         elem[0] = (<div className="profile--block"><p id="main--header">Профиль</p></div>);
         elem[1] = (<div className="profile--block">
             <p id="profile--user-name">{this.state.uname}</p>
@@ -51,14 +61,15 @@ export default class ProfileMenu extends React.Component
         elem[5] = (<div className="profile--block">
             <a href="#" className="profile--button">Отсутствует</a>
         </div>);
-
+        elem[6] = (<div className="profile--block">
+        <button onClick={this.logoutUser} className="profile--button">Выйти</button>
+    </div>);
         return elem;
     }
 
     componentDidMount()
     {
         this.getUserProps(this.state.profileId);
-        
     }
 
     render()

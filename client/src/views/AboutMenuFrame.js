@@ -31,7 +31,7 @@ export default class AboutMenu extends React.Component
   }
 
   componentDidMount(){
-    axios.post("http://localhost:3001/maintainceposts", {currentId: this.state.minId})
+    axios.post("http://192.168.1.6:3001/maintainceposts", {currentId: this.state.minId})
     .then(res => {
       if(res.data.list.length < 20)
       {
@@ -52,6 +52,12 @@ export default class AboutMenu extends React.Component
 
   render(){
     let elems = MainMenuElements();
+    
+     console.log(localStorage.getItem("cow-bull--name"))
+     console.log(localStorage.getItem("cow-bull--email"))
+     console.log(localStorage.getItem("cow-bull--user-id"))
+     console.log(localStorage.getItem("cow-bull--login-state"))
+     console.log(localStorage.getItem("cow-bull--login-key"))
 
     elems[1] = (
         <main className="about--main">
