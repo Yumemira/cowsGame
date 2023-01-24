@@ -10,6 +10,10 @@ import io from 'socket.io-client';
 
 const socket = io.connect('http://192.168.1.6:3001');
 
+socket.on('update_comments', (data) => {
+  const {commentId} = data
+  console.log(`another point of enter in ${commentId}`)
+})
 
 function App()
 {

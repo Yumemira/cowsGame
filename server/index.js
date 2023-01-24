@@ -32,9 +32,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('send_comment', (data) => {
-    const {comment, room} = data;
-    console.log("comment was sended");
-    socket.to(room).emit('update_comments', comment);
+    const {commentid, room} = data;
+    console.log(`comment ${commentid} was sended to ${room}`);
+    socket.to(room).emit('update_comments', commentid);
   });
 
   socket.on('leave_room', (data) => {
@@ -83,15 +83,14 @@ app.post("/comment--send", function(req, res){
       values ($1, $2, $3, $4, $5)`, [ req.body.postId, req.body.textData, req.body.author, req.body.id, datestamp])
       .then(() => {
         tools.queryToDb(`select "commentID" from "Comments" where userid = $1 and date = $2`,[req.body.id, datestamp])
-        .then(ret => {
-          res.json({comId:ret[0].commentID, message: "success"});
+        .then(dret => {
+          console.log(`comment catched ${dret[0].commentID}`)
+          res.json({comId:dret[0].commentID, message: "success"});
         });
       });  
     }
     else
     {
-      console.log(ret[0].loginkey)
-      console.log(req.body.valid)
       res.json({message: "error"})
     }
   })

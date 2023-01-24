@@ -1,14 +1,14 @@
-import React from "react";
-import "./MainMenuStyle.css";
-import MainMenuElements from "./MainMenuFrame.js";
-import axios from "axios";
-import PostConstructor from "./components/postsConstructor";
+import React from "react"
+import "./MainMenuStyle.css"
+import MainMenuElements from "./MainMenuFrame.js"
+import axios from "axios"
+import PostConstructor from "./components/postsConstructor"
 
 class ForumMenu extends React.Component
 {
   constructor(props)
   {
-    super(props);
+    super(props)
     this.state = {
       uid:"",
       minId: 0,
@@ -16,39 +16,39 @@ class ForumMenu extends React.Component
       socket: this.props.socket,
       data: {}
     }
-    this.postCreateLink = this.postCreateLink.bind(this);
-    this.setList = this.setList.bind(this);
+    this.postCreateLink = this.postCreateLink.bind(this)
+    this.setList = this.setList.bind(this)
   }
 
   postCreateLink = () => {
     if(this.state.uid)
     {
-      return "/new-post-create?id=" + this.state.uid;
+      return "/new-post-create?id=" + this.state.uid
     }
     else
     {
-      return "";
+      return ""
     }
   }
 
   
   setList = () => {
-    let elem = [this.state.data.length];
+    let elem = [this.state.data.length]
 
     for(let i = 0; i < this.state.data.length; i++)
     {
-      let el = this.state.data[i];
-      elem[i] = (<PostConstructor socket={this.state.socket} key={el.postID} idPost={el.postID} titleName={el.postname} textData={el.data} textAuthor={el.username} authorId={el.userid} />);
+      let el = this.state.data[i]
+      elem[i] = (<PostConstructor socket={this.state.socket} key={el.postID} idPost={el.postID} titleName={el.postname} textData={el.data} textAuthor={el.username} authorId={el.userid} />)
     }
-    return elem;
+    return elem
   }
 
   componentDidMount()
   {
-    const id = localStorage.getItem("cow-bull--user-id");
+    const id = JSON.parse(localStorage.getItem("cow-bull--user-id"))
     this.setState({
       uid: id
-    });
+    })
 
     axios.post("http://192.168.1.6:3001/posts", {currentId: this.state.minId})
     .then(res => {
@@ -57,22 +57,22 @@ class ForumMenu extends React.Component
         this.setState({
           bottomPost: true,
           data: res.data.list
-        });
+        })
       }
       else
       {
         this.setState({
           minId: 20,
           data: res.data.list
-        });
+        })
       }
-    });
+    })
     
   }
 
   render(){
-    const elem = MainMenuElements();
-    const linkCreate = this.postCreateLink();
+    const elem = MainMenuElements()
+    const linkCreate = this.postCreateLink()
     
     elem[1] = (
       <main>
@@ -80,9 +80,9 @@ class ForumMenu extends React.Component
         <a href={linkCreate} id='main--post-creator'>Новое обсуждение</a>
         {this.setList()}
       </main>
-    );
-    return elem;
+    )
+    return elem
   }
 }
 
-export default ForumMenu;
+export default ForumMenu
