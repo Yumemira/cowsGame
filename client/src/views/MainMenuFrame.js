@@ -286,17 +286,20 @@ class LoginField extends React.Component
     })
     .then(res => {
       inlineEdit(lgn, res.data.message)
-      if(window.confirm("Сохранить данные для входа?"))
+      if(res.data.message === "Успешный вход")
       {
-        localStorage.setItem("cow-bull--prefemail", JSON.stringify(email))
-      }      
-      localStorage.setItem("cow-bull--name", JSON.stringify(res.data.name))
-      localStorage.setItem("cow-bull--email", JSON.stringify(email))
-      localStorage.setItem("cow-bull--user-id", JSON.stringify(res.data.uid))
-      localStorage.setItem("cow-bull--login-state", JSON.stringify(true))
-      localStorage.setItem("cow-bull--login-key", JSON.stringify(res.data.lkey)) // необходимо изменить позднее в функцию валидации логина
+        if(window.confirm("Сохранить данные для входа?"))
+        {
+          localStorage.setItem("cow-bull--prefemail", JSON.stringify(email))
+        }      
+        localStorage.setItem("cow-bull--name", JSON.stringify(res.data.name))
+        localStorage.setItem("cow-bull--email", JSON.stringify(email))
+        localStorage.setItem("cow-bull--user-id", JSON.stringify(res.data.uid))
+        localStorage.setItem("cow-bull--login-state", JSON.stringify(true))
+        localStorage.setItem("cow-bull--login-key", JSON.stringify(res.data.lkey)) // необходимо изменить позднее в функцию валидации логина
 
-      window.location.reload()
+        window.location.reload()
+    }
     })
     .catch(err => console.log(err))
   }

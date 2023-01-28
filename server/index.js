@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
   socket.on('send_comment', (data) => {
     const {commentid, room} = data;
     console.log(`comment ${commentid} was sended to ${room}`);
-    socket.to(room).emit('update_comments', commentid);
+    socket.to(room).emit('update_comments', {comment:commentid});
   });
 
   socket.on('leave_room', (data) => {
@@ -98,16 +98,15 @@ app.post("/comment--send", function(req, res){
 
 app.post("/comment-fetch", function(req, res){
   const commentId = req.body.commentId
-  console.log(commentId)
   tools.queryToDb(`select userid, username, data from "Comments" where "commentID" = $1`,[commentId])
   .then(ret => {
-    res.json({comment: ret[0]});
+    res.json({comment: ret[0], id:commentId});
   })
 });
 
 app.post("/comments-fetch", function(req, res){
   const postId = req.body.postId;
-  tools.queryToDb(`select userid, username, data from "Comments" where "postID" = $1`,[postId])
+  tools.queryToDb(`select "commentID", userid, username, data from "Comments" where "postID" = $1`,[postId])
   .then((ret) => {
     if(ret.length > 0)
     {
@@ -134,14 +133,15 @@ app.post("/register",function(req, res){
 
       tools.queryToDb(`
       INSERT INTO userstable (name, email, password, loginkey, state)
-      VALUES ($1,$2,$3,$4, 'o');`, [uname, umail, upass, unicKey]);
-
-      tools.queryToDb(`select id from userstable where email = $1 limit 1`,[umail])
-      .then(uret => {
-        let tid = uret[0].id
-        tid = parseInt(tid)
-        res.json({message: "Успешная регистрация", lkey: unicKey, success: true, userid: uret[0].id});
-      });
+      VALUES ($1,$2,$3,$4, 'o');`, [uname, umail, upass, unicKey])
+      .then(() => {
+        tools.queryToDb(`select id from userstable where email = $1 limit 1`,[umail])
+        .then(uret => {
+          let tid = uret[0].id
+          tid = parseInt(tid)
+          res.json({message: "Успешная регистрация", lkey: unicKey, success: true, userid: uret[0].id});
+        });
+      })
     }
     else
     {
@@ -150,13 +150,19 @@ app.post("/register",function(req, res){
   });
 });
 
-app.post("/profile", function(req, res){
+app.post("/profile", function(req, res, next){
   const id = req.body.userid;
-  tools.queryToDb(`select name from userstable where id = $1 limit 1`,[id])
-  .then((ret) => {
-    res.json({props:ret[0].name});
-  })
-
+  if(id)
+  {
+    tools.queryToDb(`select name from userstable where id = $1 limit 1`,[id])
+    .then((ret) => {
+      res.json({props:ret[0].name});
+    })
+  }
+  else
+  {
+    // error page
+  }
 });
 
 app.post("/login",function(req, res){

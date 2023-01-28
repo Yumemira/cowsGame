@@ -1,7 +1,111 @@
-import React, { useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import './postStyle.css'
 import CommentConstructor from "./commentsConstructor"
 import axios from "axios"
+import {SocketContext} from "./socket"
+
+
+const MessagesCollection = ({user, room}) => {
+    const socket = useContext(SocketContext)
+
+    const [comments, setComments] = useState([])
+
+
+    
+    
+    const fetchComment = (commentId) => {
+        axios.post("http://192.168.1.6:3001/comment-fetch", {commentId:commentId})
+            .then((ares) => {
+                const comm = ares.data.comment
+                
+                const authProps = {
+                    name: comm.username,
+                    id: comm.userid
+                }
+                let addedComm = (<CommentConstructor authorProps={authProps} textData={comm.data} />)
+
+                setComments([...comments, addedComm])
+            })
+    }
+    
+    const updateComms = (comId) => {
+        socket.emit('send_comment', { commentid: comId, room: room })
+
+        fetchComment(comId)
+    }
+
+    const commentSend = () => {
+        const dataList = {
+            postId: room,
+            id: user,
+            textData: document.getElementById(`comment--data&${room}`).value,
+            author: JSON.parse(localStorage.getItem("cow-bull--name")),
+            valid: JSON.parse(localStorage.getItem("cow-bull--login-key"))
+        }
+        
+        if(JSON.parse(localStorage.getItem("cow-bull--login-state")))
+        {
+            axios.post("http://192.168.1.6:3001/comment--send", dataList)
+            .then((res) => {
+                if(res.data.message==="success")
+                {
+                    updateComms(res.data.comId)
+                }
+            })
+        }
+        else
+        {
+            window.alert("Пожалуйста, войдите в аккаунт для написания комментария.")
+        }
+
+    }
+
+    axios.post("http://192.168.1.6:3001/comments-fetch", {postId: room})
+    .then((res) => {
+        if(res.data.message === "success")
+        {
+            
+            let commentList = [res.data.comList.length]
+            for(let i = 0; i < res.data.comList.length; i++)
+            {
+                const authProps = {
+                    name: res.data.comList[i].username,
+                    id: res.data.comList[i].userid
+                }
+                commentList[i] = (<CommentConstructor authorProps={authProps} textData={res.data.comList[i].data}/>)
+            }
+            setComments(commentList)
+        }
+        else
+        {
+            //Error notification
+        }
+    })
+
+    
+    useEffect(() => {
+        socket.emit('join_room', { userid: user, room: room })
+
+        socket.on('update_comments', (data) => {
+            const {comment} = data
+            fetchComment(comment)
+        });
+
+        return () => {
+            socket.off('update_comments', (data) => {
+                const {comment} = data
+                fetchComment(comment)
+            });
+        }
+    },[socket])
+
+    return (<div className="post--comments-part">
+            {comments}
+            <input type="text" name="comment--input" id={`comment--data&${room}`} defaultValue="введите комментарий..."></input>
+            <button name="comment--send" onClick={commentSend}>{">>"}</button>
+        </div>)
+    
+}
 
 export default class PostConstructor extends React.Component
 {
@@ -14,101 +118,18 @@ export default class PostConstructor extends React.Component
             isComments: false,
             header: this.props.titleName,
             text: this.props.textData,
-            author: this.props?.textAuthor,
-            authorId:this.props?.authorId,
-            socket: this.props.socket,
-            comments: []
+            author: this.props.textAuthor,
+            authorId:this.props.authorId
         }
         this.showPost = this.showPost.bind(this)
-        this.commentSend = this.commentSend.bind(this)
-        this.showComms = this.showComms.bind(this)
         this.openComms = this.openComms.bind(this)
-        this.joinRoom = this.joinRoom.bind(this)
-        this.fetchComment = this.fetchComment.bind(this)
-        this.updateComms = this.updateComms.bind(this)
     }
 
     
-
-    commentSend = () => {
-        const dataList = {
-            postId: this.state.id,
-            id: JSON.parse(localStorage.getItem("cow-bull--user-id")),
-            textData: document.getElementById(`comment--data&${this.state.id}`).value,
-            author: JSON.parse(localStorage.getItem("cow-bull--name")),
-            valid: JSON.parse(localStorage.getItem("cow-bull--login-key"))
-        }
-        console.log(JSON.parse(localStorage.getItem("cow-bull--login-key")))
-        
-        if(JSON.parse(localStorage.getItem("cow-bull--login-state")))
-        {
-            axios.post("http://192.168.1.6:3001/comment--send", dataList)
-            .then((res) => {
-                if(res.data.message==="success")
-                {
-                    this.updateComms(res.data.comId)
-                }
-            })
-        }
-        else
-        {
-            window.alert("Пожалуйста, войдите в аккаунт для написания комментария.")
-        }
-    }
-
-    
-    joinRoom = () => {
-        this.state.socket.emit('join_room', { userid: JSON.parse(localStorage.getItem("cow-bull--user-id")), room: this.state.id })
-    }
-    
-    leaveRoom = () => {
-        this.state.socket.emit('leave_room', { userid: JSON.parse(localStorage.getItem("cow-bull--user-id")), room: this.state.id })
-    }
-
-    updateComms = (comId) => {
-        console.log(comId);
-        this.state.socket.emit('send_comment', { commentid: comId, room: this.state.id })
-
-        this.fetchComment(comId)
-    }
-
-    fetchComment = (commentId) => {
-        axios.post("http://192.168.1.6:3001/comment-fetch", {commentId:commentId})
-            .then((ares) => {
-                const comm = ares.data.comment
-                const authProps = {
-                    name: comm.username,
-                    id: comm.userid
-                }
-                let addedComm = (<CommentConstructor authorProps={authProps} textData={comm.data} />)
-
-                this.setState({
-                    comments: this.state.comments.concat(addedComm)
-                })
-            })
-            
-    }
-
     openComms = function(){
-        if(this.state.isComments)
-        {
-            const userProps = {
-                postId: this.state.id,
-                username:JSON.parse(localStorage.getItem("cow-bull--name")),
-                userId: JSON.parse(localStorage.getItem("cow-bull--user-id"))
-            }
-            
-
-            return (<div className="post--comments-part">
-                {this.state.comments}
-                <input type="text" name="comment--input" id={`comment--data&${this.state.id}`} defaultValue="введите комментарий..."></input>
-                <button name="comment--send" onClick={this.commentSend}>{">>"}</button>
-            </div>)
-        }
-        else
-        {
-            return null
-        }
+        this.setState(prevState => ({
+            isComments:!prevState.isComments
+        }))
     }
 
     showPost = function()
@@ -118,54 +139,12 @@ export default class PostConstructor extends React.Component
         }))
     }
 
-    showComms = function()
-    {
-        if(!this.state.isComments)
-        {
-            this.joinRoom()
-
-            axios.post("http://192.168.1.6:3001/comments-fetch", {postId: this.state.id})
-            .then((res) => {
-                if(res.data.message === "success")
-                {
-                    
-                    let commentList = [res.data.comList.length]
-                    for(let i = 0; i < res.data.comList.length; i++)
-                    {
-                        const authProps = {
-                            name: res.data.comList[i].username,
-                            id: res.data.comList[i].userid
-                        }
-                        commentList[i] = (<CommentConstructor authorProps={authProps} textData={res.data.comList[i].data} />)
-                    }
-                    this.setState(() => ({
-                        comments: commentList,
-                        isComments:true
-                    }))
-                }
-                else
-                {
-                    this.setState(() => ({
-                        isComments: true
-                    }))
-                }
-            })
-
-        }
-        else
-        {
-            this.leaveRoom()
-            this.setState(() => ({
-                isComments: false
-            }))
-        }
-    }
-
+    
 
     render()
     {
-        const commentList = this.openComms()
         var elem
+        
         if(this.state.isOpened)
         {
             elem = (
@@ -176,8 +155,8 @@ export default class PostConstructor extends React.Component
                         <p className="post--body">{this.state.text}</p>
                     </div>
                     <button className="post--button">Лайк</button>
-                    <button className="post--button" onClick={this.showComms}>Комм</button>
-                    {commentList}
+                    <button className="post--button" onClick={this.openComms}>Комм</button>
+                    {this.state.isComments ? <MessagesCollection user={JSON.parse(localStorage.getItem("cow-bull--user-id"))} room={this.state.id}/> : null}
                 </div>
                 )
         }
@@ -191,9 +170,8 @@ export default class PostConstructor extends React.Component
                         <p className="post--body">{this.state.text.substring(0,100) + "..."}</p>
                     </div>
                     <button className="post--button">Лайк</button>
-                    <button className="post--button" onClick={this.showComms}>Комм</button>
-                    {commentList}
-                    
+                    <button className="post--button" onClick={this.openComms}>Комм</button>
+                    {this.state.isComments ? <MessagesCollection user={JSON.parse(localStorage.getItem("cow-bull--user-id"))} room={this.state.id}/> : null}
                 </div>
                 )
         }
