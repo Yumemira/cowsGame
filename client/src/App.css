@@ -39,6 +39,7 @@
 
 body
 {
-    background-image: url("../src/views/images/background.jpg");
+    /* background-image: url("../src/views/images/background.jpg"); */
+    background-color: rgb(155, 104, 21);
     background-size: cover;
 }

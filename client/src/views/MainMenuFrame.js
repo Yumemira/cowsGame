@@ -7,14 +7,19 @@ import validator from "validator"
 function MainMenuElements()
 {
   
-  const elems = [3]
+  const elems = [2]
   
   elems[0] = (
     <footer id="footer--main">
-        <nav>
-          <a href='/game-prepare'className="refButtons" key="p">Играть</a>
-          <a href='/' className="refButtons" key="f">Форум</a>
-          <a href='/about' className="refButtons" key="a">О проекте</a>
+        <nav id='footer--nav'>
+          <div className='game--icon' />
+          <section id='footer--links'>
+            <a href='/game-prepare'className="refButtons" key="p">Игра</a>
+            <a href='/' className="refButtons" key="n">Новости</a>
+            <a href='/forum' className="refButtons" key="f">Форум</a>
+            <a href='/about' className="refButtons" key="a">О проекте</a>
+          </section>
+          <Toggle />
         </nav>
     </footer>
   )
@@ -22,10 +27,6 @@ function MainMenuElements()
     <main>
       
     </main>
-  ) 
-
-  elems[2] = (
-    <Toggle />
   )
 
   return elems
@@ -78,8 +79,8 @@ class Toggle extends React.Component {
     {
       const hrefLink = this.intoProfile()
       return (
-        <div>
-          <a id="inlineText" href={hrefLink}>{JSON.parse(localStorage.getItem("cow-bull--name"))}  </a>
+        <div className='div--inline' id='button--profile'>
+          <a className="refButtons" href={hrefLink}>{JSON.parse(localStorage.getItem("cow-bull--name"))}  </a>
         </div>
       )
     }
