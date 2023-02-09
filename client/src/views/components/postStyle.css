@@ -1,12 +1,67 @@
 .post--container
 {
-    padding-left: 2%;
-    background-color: rgb(255, 210, 155);
-    opacity: 0.9;
+    width: 100%;
+    background-color: rgba(30, 30, 30,0.8);
+    border: 2px solid rgb(121, 121, 121);
+    border-radius: 10px;
+
     margin-top: 2%;
-    color: black;
+    color: white;
 }
 .post--container:hover
 {
-    background-color: rgb(199, 143, 91);
+    background-color: rgb(20, 20, 20);
+}
+
+.post--body
+{
+    text-align: center;
+    font-size: 40px;
+}
+
+.post--title
+{
+    text-align: center;
+}
+
+.post--button-like
+{
+    position: relative;
+    background-color: inherit;
+    background-image: url("../images/like.png");
+    background-size: 100% 100%;
+    border: none;
+    left: 30%;
+    width: 100px;
+    height: 100px;
+}
+
+.post--button-like:hover
+{
+    background-color: rgb(69, 68, 68);
+}
+
+.post--button-comm
+{
+    position: relative;
+    background-color: inherit;
+    background-image: url("../images/comm.png");
+    background-size: 100% 100%;
+    border: none;
+    left: 45%;
+    width: 100px;
+    height: 100px;
+}
+
+.post--button-comm:hover
+{
+    background-color: rgb(69, 68, 68);
+}
+
+.post--footer
+{
+    position: relative;
+    width: 90%;
+    left: 5%;
+    border-top: 1px solid white;
 }

@@ -14,7 +14,7 @@ const MessagesCollection = ({user, room}) => {
     
     
     const fetchComment = (commentId) => {
-        axios.post("http://192.168.1.6:3001/comment-fetch", {commentId:commentId})
+        axios.post("http://192.168.1.3:3001/comment-fetch", {commentId:commentId})
             .then((ares) => {
                 const comm = ares.data.comment
                 
@@ -45,7 +45,7 @@ const MessagesCollection = ({user, room}) => {
         
         if(JSON.parse(localStorage.getItem("cow-bull--login-state")))
         {
-            axios.post("http://192.168.1.6:3001/comment--send", dataList)
+            axios.post("http://192.168.1.3:3001/comment--send", dataList)
             .then((res) => {
                 if(res.data.message==="success")
                 {
@@ -60,7 +60,7 @@ const MessagesCollection = ({user, room}) => {
 
     }
 
-    axios.post("http://192.168.1.6:3001/comments-fetch", {postId: room})
+    axios.post("http://192.168.1.3:3001/comments-fetch", {postId: room})
     .then((res) => {
         if(res.data.message === "success")
         {
@@ -149,13 +149,14 @@ export default class PostConstructor extends React.Component
         {
             elem = (
                 <div className="post--container">
-                    <div className="post--body" onClick={this.showPost}>
-                        <header className="post--title">{this.state.header}</header>
-                        <h1 className="post--tags">{this.state.hashTags}</h1>
+                    <section className="post--body" onClick={this.showPost}>
+                        <h1 className="post--title">{this.state.header}</h1>
                         <p className="post--body">{this.state.text}</p>
-                    </div>
-                    <button className="post--button">Лайк</button>
-                    <button className="post--button" onClick={this.openComms}>Комм</button>
+                    </section>
+                    <section className="post--footer">
+                        <button className="post--button-like"></button>
+                        <button className="post--button-comm" onClick={this.openComms}></button>
+                    </section>
                     {this.state.isComments ? <MessagesCollection user={JSON.parse(localStorage.getItem("cow-bull--user-id"))} room={this.state.id}/> : null}
                 </div>
                 )
@@ -164,13 +165,14 @@ export default class PostConstructor extends React.Component
         {
             elem = (
                 <div className="post--container">
-                    <div className="post--body" onClick={this.showPost}>
+                    <section className="post--body" onClick={this.showPost}>
                         <h1 className="post--title">{this.state.header}</h1>
-                        <header className="post--tags">{this.state.hashTags}</header>
-                        <p className="post--body">{this.state.text.substring(0,100) + "..."}</p>
-                    </div>
-                    <button className="post--button">Лайк</button>
-                    <button className="post--button" onClick={this.openComms}>Комм</button>
+                        <p className="post--body">{this.state.text.substring(0,1000) + "..."}</p>
+                    </section>
+                    <section className="post--footer">
+                        <button className="post--button-like"></button>
+                        <button className="post--button-comm" onClick={this.openComms}></button>
+                    </section>
                     {this.state.isComments ? <MessagesCollection user={JSON.parse(localStorage.getItem("cow-bull--user-id"))} room={this.state.id}/> : null}
                 </div>
                 )

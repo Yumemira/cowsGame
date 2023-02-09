@@ -17,7 +17,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin:"http://192.168.1.6:3000",
+    origin:"http://192.168.1.3:3000",
     methods: ['GET', 'POST']
   },
 });
@@ -56,7 +56,7 @@ app.post("generatedId", function(req, res){
 app.post("/maintainceposts", function(req, res){
   const currentId = req.body.currentId;
   const maxId = currentId + 20;
-  tools.queryToDb(`select * from maintainceposts where "postID" >= $1 and "postID" <= $2`,[currentId, maxId])
+  tools.queryToDb(`select * from "Posts" where "tag" = $3 and "postID" >= $1 and "postID" <= $2`,[currentId, maxId, "maintenance"])
   .then((ret) =>
   {
     res.json({list: ret});
@@ -209,6 +209,6 @@ app.post("/add-new-post", function(req,res){
 });
 
 
-server.listen(port,'192.168.1.6', () => {
+server.listen(port,'192.168.1.3', () => {
   console.log(`Server listening on ${port}`);
 });

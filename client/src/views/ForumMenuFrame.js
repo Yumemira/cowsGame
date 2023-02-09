@@ -1,5 +1,5 @@
 import React from "react"
-import "./MainMenuStyle.css"
+import "./ForumMenuStyle.css"
 import MainMenuElements from "./MainMenuFrame.js"
 import axios from "axios"
 import PostConstructor from "./components/postsConstructor"
@@ -50,7 +50,7 @@ class ForumMenu extends React.Component
       uid: id
     })
 
-    axios.post("http://192.168.1.6:3001/posts", {currentId: this.state.minId})
+    axios.post("http://192.168.1.3:3001/posts", {currentId: this.state.minId})
     .then(res => {
       if(res.data.list.length < 20)
       {
@@ -75,9 +75,9 @@ class ForumMenu extends React.Component
     const linkCreate = this.postCreateLink()
     
     elem[1] = (
-      <main>
-        <div className='main--footer'><p>Форум</p></div>
-        <a href={linkCreate} id='main--post-creator'>Новое обсуждение</a>
+      <main id='table--content'>
+        <div className='main--header'><p id='content--page-name'>Форум</p></div>
+        <a href={linkCreate} id='main--post-creator'>Новое обсуждение...</a>
         {this.setList()}
       </main>
     )

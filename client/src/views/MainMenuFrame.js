@@ -7,12 +7,11 @@ import validator from "validator"
 function MainMenuElements()
 {
   
-  const elems = [2]
+  const elems = [3]
   
   elems[0] = (
     <footer id="footer--main">
         <nav id='footer--nav'>
-          <div className='game--icon' />
           <section id='footer--links'>
             <a href='/game-prepare'className="refButtons" key="p">Игра</a>
             <a href='/' className="refButtons" key="n">Новости</a>
@@ -24,9 +23,15 @@ function MainMenuElements()
     </footer>
   )
   elems[1] = (
-    <main>
+    <main id='table--content'>
       
     </main>
+  )
+  
+  elems[2] = (
+    <section id='table--profile'>
+      
+    </section>
   )
 
   return elems
@@ -131,7 +136,7 @@ class RegisterField extends React.Component
     if(checkedData(username, useremail, userpassword, userRepeatPassword))
     {
 
-      axios.post('http://192.168.1.6:3001/register',{uname: username,
+      axios.post('http://192.168.1.3:3001/register',{uname: username,
       umail: useremail,
       upassword: userpassword})
       .then((res) => {
@@ -281,7 +286,7 @@ class LoginField extends React.Component
       return false
     }
 
-    axios.post('http://192.168.1.6:3001/login',{umail: email,
+    axios.post('http://192.168.1.3:3001/login',{umail: email,
       upassword: pass,
       lkey: JSON.parse(localStorage.getItem("cow-bull--login-key"))
     })
@@ -318,6 +323,11 @@ class LoginField extends React.Component
       </>
     )
   }
+}
+
+class AccountSection extends React.Component
+{
+  
 }
 
 export default MainMenuElements

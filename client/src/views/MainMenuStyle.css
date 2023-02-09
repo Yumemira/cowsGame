@@ -11,7 +11,9 @@
 {   
     font-size: 30px;
     color: white;
-    background-color: black;
+    background-color: rgba(10, 10, 10, 0.8);
+    border-bottom: 2px solid black;
+    border-bottom-left-radius: 10px;
 
     
     opacity: 0.9;
@@ -30,21 +32,12 @@
     display: inline-block;
     width: 50%;
     
-    margin-left: 20%;
+    margin-left: 27%;
 }
 
 .div--inline
 {
     display: inline-block;
-}
-
-.game--icon
-{
-    display: inline-block;
-    width: 75px;
-    height: 50px;
-    background-image: url("./images/mainIcon.ico");
-    background-size: 100% 100%;
 }
 
 #upperFrame
@@ -55,43 +48,27 @@
     background-color: black;
 }
 
-.main--footer
+#table--content
 {
-    background-color: rgb(233, 189, 140);
-}
-
-#main--post-creator
-{
-    display: block;
-    width: 170px;
-    height: 30px;
-
-    
-    background-image: url("./images/button--name-background.png");
-    background-size: 100% 100%;
-    padding-top: 25px;
-    padding-left: 2%;
-    padding-right: 2%;
-    padding-bottom: 1%;
-    color: black;
-    margin-right: 2%;
-    text-align: center;
-    text-decoration: none;
-}
-
-#main--post-creator:hover
-{
-    background-image: url("./images/button--name-background-h.png");
-}
-
-main
-{
-
-    width: 100%;
-    margin-top: 200px;
+    position: absolute;
+    left: 25%;
+    width: 50%;
+    margin-top: 5%;
     padding-top: 5px;
-    left: 0px;
-    background-color: black;
+    justify-content: center;
+}
+
+#table--profile
+{
+    position: fixed;
+    margin-top: 5%;
+    width: 20%;
+    height: 50%;
+    left: 2%;
+    
+    border: 2px solid white;
+    border-radius: 20px;
+
     opacity: 0.9;
 }
 
@@ -100,46 +77,47 @@ main
     width: 170px;
     height: 30px;
     display: inline-block;
-    background-image: url("./images/button--background.png");
-    background-size: 100% 100%;
     padding-top: 1%;
     padding-left: 2%;
     padding-right: 2%;
     padding-bottom: 2%;
-    color: black;
-    margin-right: 2%;
+    border-left: 2px solid gray;
+    border-right: 2px solid gray;
+    border-radius: 5px;
+    color: white;
+
     text-align: center;
     text-decoration: none;
 }
 
 .refButtons:hover
 {
-    background-image: url("./images/button--background-hover.png");
+    background-color: gray;
 }
 
 #inlineText
 {
     position: absolute;
-    background-image: url("./images/button--name-background.png");
-    background-size: 100% 100%;
     top:0%;
     right:0%;
     font-size: 24px;
     width: 170px;
-    height: 30px;
-    padding-top: 25px;
+    height: 20px;
+    background-color: rgba(10, 10, 10, 0.8);
+    padding-top: 15px;
     padding-left: 2%;
     padding-right: 2%;
     padding-bottom: 2%;
-    color: black;
+    color: white;
     text-align: center;
     text-decoration: none;
+    border-left: 2px solid gray;
     z-index: 2;
 }
 
 #inlineText:hover
 {
-    background-image: url("./images/button--name-background-h.png");
+    background-color: gray;
 }
 
 #loginMenu
@@ -165,6 +143,6 @@ main
 #logregField
 {
     color: white;
-    background-color: black;
+    background-color: rgba(10, 10, 10, 0.8);
     opacity: 0.9;
 }
