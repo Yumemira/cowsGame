@@ -1,9 +1,9 @@
 import React from "react"
-import "./AboutMenuStyle.css"
+import "./newspaperStyle.css"
 import MainMenuElements from "./MainMenuFrame"
 import PostConstructor from "./components/postsConstructor"
 import axios from "axios"
-export default class AboutMenu extends React.Component
+export default class Newspaper extends React.Component
 {
   constructor(props)
   {
@@ -55,11 +55,9 @@ export default class AboutMenu extends React.Component
     let elems = MainMenuElements()
     
     elems[1] = (
-        <main className="about--main">
-          <div className="about--block"><p id="about--footer">О проекте</p></div>
-          {
-            this.setList()
-          }
+        <main id='table--content'>
+            <div className='main--header'><p id='content--page-name'>Новости</p></div>
+            {this.setList()}
         </main>
       )
 

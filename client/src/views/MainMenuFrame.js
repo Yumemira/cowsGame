@@ -9,19 +9,7 @@ function MainMenuElements()
   
   const elems = [3]
   
-  elems[0] = (
-    <footer id="footer--main">
-        <nav id='footer--nav'>
-          <section id='footer--links'>
-            <a href='/game-prepare'className="refButtons" key="p">Игра</a>
-            <a href='/' className="refButtons" key="n">Новости</a>
-            <a href='/forum' className="refButtons" key="f">Форум</a>
-            <a href='/about' className="refButtons" key="a">О проекте</a>
-          </section>
-          <Toggle />
-        </nav>
-    </footer>
-  )
+  elems[0] = <ButtonProfile />
   elems[1] = (
     <main id='table--content'>
       
@@ -38,13 +26,14 @@ function MainMenuElements()
 }
 
 
-class Toggle extends React.Component {
+class ButtonProfile extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      fieldSet:(<></>),
       isToggleOn: false,
-      isRegisterOn: true,
-      toggleButtonText: "Вход"
+      isRegisterOn: false,
+      toggleButtonText: "Регистрация"
     }
 
     this.handleClick = this.handleClick.bind(this)
@@ -53,9 +42,20 @@ class Toggle extends React.Component {
   }
 
   handleClick = () => {
-    this.setState(prevState => ({
-      isToggleOn: !prevState.isToggleOn
-    }))
+    if(this.state.isToggleOn)
+    {
+      this.setState(prevState => ({
+        isToggleOn: !prevState.isToggleOn,
+        fieldSet: <></>
+      }))
+    }
+    else
+    {
+      this.setState(prevState => ({
+        isToggleOn: !prevState.isToggleOn,
+        fieldSet: prevState.isRegisterOn? <RegisterField /> : <LoginField />
+      }))
+    }
   }
 
   intoProfile = () => {
@@ -63,56 +63,69 @@ class Toggle extends React.Component {
   }
 
   changeFieldset = () => {
-    let texting
     if(this.state.isRegisterOn)
     {
-      texting = "Регистрация"
+      this.setState(prevState => ({
+        isRegisterOn: !prevState.isRegisterOn,
+        toggleButtonText: "Регистрация",
+        fieldSet: <LoginField />
+      }))
     }
     else
     {
-      texting = "Вход"
-    }
+      this.setState(prevState => ({
+        isRegisterOn: !prevState.isRegisterOn,
+        toggleButtonText: "Вход",
+        fieldSet: <RegisterField />
+      }))
 
-    this.setState(prevState => ({
-      isRegisterOn: !prevState.isRegisterOn,
-      toggleButtonText: texting
-    }))
+    }
   }
 
   render() {
     if(false|JSON.parse(localStorage.getItem("cow-bull--login-state")))
     {
       const hrefLink = this.intoProfile()
+
       return (
-        <div className='div--inline' id='button--profile'>
-          <a className="refButtons" href={hrefLink}>{JSON.parse(localStorage.getItem("cow-bull--name"))}  </a>
-        </div>
+        <section id="footer--main">
+            <nav id='footer--nav'>
+              <section id='footer--links'>
+                <a href='/game-prepare'className="refButtons" key="p">Игра</a>
+                <a href='/' className="refButtons" key="n">Новости</a>
+                <a href='/forum' className="refButtons" key="f">Форум</a>
+                <a href='/about' className="refButtons" key="a">О проекте</a>
+                <div className='div--inline' id='button--profile'>
+                  <a className="refButtons" href={hrefLink}>{JSON.parse(localStorage.getItem("cow-bull--name"))}  </a>
+                </div>
+              </section>
+            </nav>
+        </section>
       )
-    }
-
-    let fieldSet
-
-    if(this.state.isRegisterOn)
-    {
-      fieldSet = <RegisterField />
-    }
-    else
-    {
-      fieldSet = <LoginField />
     }
     
     return (
-        <div>
-          <button id="inlineText" onClick={this.handleClick}> Войти </button>
-          <section id="loginMenu" className={classnames("--visibled", {
-              "--hidden": !this.state.isToggleOn
-            })}>
-            <div id="logregField">
-              <input type='button' value={this.state.toggleButtonText} onClick={this.changeFieldset}></input>
-              {fieldSet}
-            </div>
-          </section>
+      <>
+        <section id="footer--main">
+          <nav id='footer--nav'>
+            <section id='footer--links'>
+              <a href='/game-prepare'className="refButtons" key="p">Игра</a>
+              <a href='/' className="refButtons" key="n">Новости</a>
+              <a href='/forum' className="refButtons" key="f">Форум</a>
+              <a href='/about' className="refButtons" key="a">О проекте</a>
+            </section>
+            <button id="inlineText" onClick={this.handleClick}> Войти </button>
+          </nav>
+        </section>
+        <div id="loginMenu" className={classnames("--visibled", {
+            "--hidden": !this.state.isToggleOn
+          })}>
+          <div id="logregField">
+            <input type='button' className='login-menu--button' value={this.state.toggleButtonText} onClick={this.changeFieldset}></input>
+            {this.state.fieldSet}
+          </div>
         </div>
+      </>
       )
   }
 }
@@ -164,17 +177,12 @@ class RegisterField extends React.Component
   render() {
     return(
       <>
-        <p> Регистрация </p>
         <p id ="attentionRegText"></p>
-        <label htmlFor="email" key="fe"> почта: </label>
-        <input type="email" name="email" key="e"></input><br/>
-        <label htmlFor="username" key="fn"> имя: </label>
-        <input type="text" name="username" key="n"></input><br/>
-        <label htmlFor="password" key="fp"> пароль: </label>
-        <input type="password" name="password" key="p"></input><br/>
-        <label htmlFor="repeatPassword" key="fr"> повтор пароля: </label>
-        <input type="password" name="repeatPassword" key="r"></input><br/>
-        <button name="submitForm" className="submitForm" onClick={this.getRegistered}> Зарегистрироваться </button>
+        <InputElement buttonName='Почта' itype='email' />
+        <InputElement buttonName='Имя' itype='text' />
+        <InputElement buttonName='Пароль' itype='password' />
+        <InputElement buttonName='Повтор пароля' itype='password' />
+        <button name="submitForm" className='login-menu--button' onClick={this.getRegistered}> Зарегистрироваться </button>
       </>
     )
   }
@@ -313,21 +321,44 @@ class LoginField extends React.Component
   render() {
     return(
       <>
-        <p> Вход </p>
         <p id="attentionLogText"></p>
-        <label htmlFor="email"> почта: </label>
-        <input type="email" name="email" defaultValue={JSON.parse(localStorage.getItem("cow-bull--prefemail"))}></input><br/>
-        <label htmlFor="password"> пароль: </label>
-        <input type="password" name="password"></input><br/>
-        <button name="submitForm" className="submitForm" onClick={this.getLogining}> Войти </button>
+        <InputElement buttonName='Почта' itype='email' dValue={JSON.parse(localStorage.getItem("cow-bull--prefemail"))} />
+        <InputElement buttonName='Пароль' itype='password' />
+        <button name="submitForm" className='login-menu--button' onClick={this.getLogining}> Войти </button>
       </>
     )
   }
 }
 
-class AccountSection extends React.Component
+class InputElement extends React.Component
 {
-  
+  constructor(props)
+  {
+    super(props)
+    
+    this.state = {
+      text:props.buttonName,
+      itype:props.itype,
+      dValue:props?.dValue,
+      clearInput: true
+    }
+    this.getInput = this.getInput.bind(this)
+  }
+
+  getInput = (e) => {
+    this.setState({clearInput:(e.target.value.length === 0)})
+  }
+
+  render()
+  {
+    return (
+    <div className='input--label'>
+      <span className={classnames("--visibled", {
+            "--hidden": !this.state.clearInput
+          })}>{this.state.text}</span>
+      <input type={this.state.itype} className='input--field' onChange={this.getInput} defaultValue={this.state.dValue}></input>
+    </div>);
+  }
 }
 
 export default MainMenuElements
