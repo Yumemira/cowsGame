@@ -158,6 +158,14 @@
     font-size: 50px;
 }
 
+#logreg--position
+{
+    position: relative;
+    width: 100%;
+    height: 80%;
+    top: 10%;
+}
+
 .login-menu--button
 {
     padding-left: 2%;
@@ -180,8 +188,16 @@
 
 #attentionLogText
 {
-    margin-left: 50%;
-    transform: translateX(-50%);
+    width: 100%;
+    height: 40px;
+    text-align:center;
+}
+
+#attentionRegText
+{
+    height: 40px;
+    width: 100%;
+    text-align:center;
 }
 
 .input--label

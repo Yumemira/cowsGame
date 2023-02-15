@@ -121,8 +121,8 @@ class ButtonProfile extends React.Component {
             "--hidden": !this.state.isToggleOn
           })}>
           <div id="logregField">
-            <input type='button' className='login-menu--button' value={this.state.toggleButtonText} onClick={this.changeFieldset}></input>
-            {this.state.fieldSet}
+              {this.state.fieldSet}
+              <input type='button' className='login-menu--button' value={this.state.toggleButtonText} onClick={this.changeFieldset}></input>
           </div>
         </div>
       </>
@@ -176,14 +176,14 @@ class RegisterField extends React.Component
 
   render() {
     return(
-      <>
+      <section id='logreg--position'>
         <p id ="attentionRegText"></p>
-        <InputElement buttonName='Почта' itype='email' />
-        <InputElement buttonName='Имя' itype='text' />
-        <InputElement buttonName='Пароль' itype='password' />
-        <InputElement buttonName='Повтор пароля' itype='password' />
+        <InputElement buttonName='Почта' itype='email' iname='email' />
+        <InputElement buttonName='Имя' itype='text' iname='username' />
+        <InputElement buttonName='Пароль' itype='password' iname='password' />
+        <InputElement buttonName='Повтор пароля' itype='password' iname='repeatPassword' />
         <button name="submitForm" className='login-menu--button' onClick={this.getRegistered}> Зарегистрироваться </button>
-      </>
+      </section>
     )
   }
 }
@@ -320,12 +320,12 @@ class LoginField extends React.Component
 
   render() {
     return(
-      <>
+      <section id="logreg--position">
         <p id="attentionLogText"></p>
-        <InputElement buttonName='Почта' itype='email' dValue={JSON.parse(localStorage.getItem("cow-bull--prefemail"))} />
-        <InputElement buttonName='Пароль' itype='password' />
+        <InputElement buttonName='Почта' itype='email' iname='email' dValue={JSON.parse(localStorage.getItem("cow-bull--prefemail"))} />
+        <InputElement buttonName='Пароль' itype='password' iname='password' />
         <button name="submitForm" className='login-menu--button' onClick={this.getLogining}> Войти </button>
-      </>
+      </section>
     )
   }
 }
@@ -340,6 +340,7 @@ class InputElement extends React.Component
       text:props.buttonName,
       itype:props.itype,
       dValue:props?.dValue,
+      iname:props.iname,
       clearInput: true
     }
     this.getInput = this.getInput.bind(this)
@@ -356,7 +357,7 @@ class InputElement extends React.Component
       <span className={classnames("--visibled", {
             "--hidden": !this.state.clearInput
           })}>{this.state.text}</span>
-      <input type={this.state.itype} className='input--field' onChange={this.getInput} defaultValue={this.state.dValue}></input>
+      <input type={this.state.itype} className='input--field' name={this.state.iname} onChange={this.getInput} defaultValue={this.state.dValue} autoComplete='off'></input>
     </div>);
   }
 }
