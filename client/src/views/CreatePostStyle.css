@@ -1,56 +1,89 @@
-.main--object
+#main--object
 {
+    position: absolute;
+    width: 90%;
+    height: 85%;
+    top: 10%;
+    left: 5%;
+    background-color: rgba(30,30,30,0.8);
+    border-radius: 20px;
+}
+
+#main--header
+{
+    text-align: center;
     width: 100%;
-    display:flex;
-    justify-content:flex-end;
+    font-size: 40px;
+    height: 40px;
 }
 
 .main--block
 {
-    display: block;
-    width: 100%;
-    background-color: rgb(255, 202, 43);
-    color: black;
-
+    position: relative;
+    margin-top: 3%;
+    background-color: rgba(10,10,10,0.8);
+    margin-left: 5%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 90%;
+    border-radius: 10px;
 }
 
-.post--block
+#post--title
 {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    color: white;
+    text-align: center;
+    position: relative;
+    height: 50px;
+    font-size: 50px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    background-color: initial;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-radius: 5px;
+}
+
+#post--title:focus
+{
+    outline: none;
+    border-bottom: 2px solid white;
 }
 
 #post--body
 {
-    font-size: 24px;
-    width: 80%;
-    height: 600px;
-    resize: none;
+    font-size: 40px;
+    color: white;
+    position: relative;
+    width: 94%;
+    min-height: 400px;
+    border-radius: 10px;
+    left: 3%;
+    background-color: initial;
+}
+
+#post--body:focus
+{
+    outline: none;
+    border: 1px solid white;
 }
 
 #post--button
 {
+    background-color: rgba(30,30,30,0.8);
+    font-size: 50px;
+    color: white;
 
-    width: 170px;
-    height: 30px;
-    background-image: url("./images/button--name-background.png");
-    background-size: 100% 100%;
-    padding-top: 1.5%;
-    padding-left: 2%;
-    padding-right: 2%;
-    padding-bottom: 2%;
-    color: black;
-    margin-right: 2%;
-    text-align: center;
-    text-decoration: none;
-
-    
-    margin-left: auto;
-    margin-right: auto;
+    position: relative;
+    left: 50%;
+    transform:translateX(-50%);
+    margin-top: 3%;
+    width: 30%;
+    height: 60px;
 }
 
 #post--button:hover
 {
-    background-image: url("./images/button--name-background-h.png");
+    background-color: rgba(10,10,10,0.8);
 }

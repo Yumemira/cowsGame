@@ -91,15 +91,18 @@ export default class CreatePost extends React.Component
 
     render()
     {
-        let elems = MainMenuElements()
+        let elems = [2]
+        elems[0] = MainMenuElements()[0]
         elems[1] = (
             <main id="main--object">
-                <div className="main--block"><p id="post--console"></p></div>
-                <div className="main--block" id="main--header"><input className="post--block" type="text" id="post--title" defaultValue="Новая статья"></input></div>
-                <div className="main--block" id="main--body">
-                    <textarea className="post--block" id="post--body" type="text"></textarea>
+                <div id="main--header"><p id="post--console"></p></div>
+                <div className="main--block">
+                    <input type="text" id="post--title" defaultValue="Новая статья"></input>
                 </div>
-                <div className="main--block"><div id="post--button" onClick={this.queryNewPost}>Опубликовать пост</div></div>
+                <div className="main--block">
+                    <textarea id="post--body" type="text"></textarea>
+                </div>
+                <button id="post--button" onClick={this.queryNewPost}>Опубликовать пост</button>
             </main>
         )
         return elems

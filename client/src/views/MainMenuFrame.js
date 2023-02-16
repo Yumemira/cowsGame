@@ -16,11 +16,14 @@ function MainMenuElements()
     </main>
   )
   
-  elems[2] = (
-    <section id='table--profile'>
-      
-    </section>
-  )
+  if(JSON.parse(localStorage.getItem("cow-bull--login-state")))
+  {
+    elems[2] = (
+      <section id='table--profile'>
+        
+      </section>
+    )
+  }
 
   return elems
 }
@@ -95,11 +98,9 @@ class ButtonProfile extends React.Component {
                 <a href='/' className="refButtons" key="n">Новости</a>
                 <a href='/forum' className="refButtons" key="f">Форум</a>
                 <a href='/about' className="refButtons" key="a">О проекте</a>
-                <div className='div--inline' id='button--profile'>
-                  <a className="refButtons" href={hrefLink}>{JSON.parse(localStorage.getItem("cow-bull--name"))}  </a>
-                </div>
               </section>
             </nav>
+            <a className='refButtons' id='button--profile' href={hrefLink}>{JSON.parse(localStorage.getItem("cow-bull--name"))}  </a>
         </section>
       )
     }
@@ -341,7 +342,7 @@ class InputElement extends React.Component
       itype:props.itype,
       dValue:props?.dValue,
       iname:props.iname,
-      clearInput: true
+      clearInput: props.dValue === undefined
     }
     this.getInput = this.getInput.bind(this)
   }

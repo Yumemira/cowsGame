@@ -1,38 +1,79 @@
-.profile--block
+#profile--content
 {
-    width: 60%;
-    margin-left: 40%;
-}
-.profile--button
-{
-    display: inline-block;
-    background-image: url("./images/button--name-background.png");
-    background-size: 100% 100%;
-    width: 170px;
-    height: 30px;
-    padding-top: 25px;
-    padding-left: 2%;
-    padding-right: 2%;
-    padding-bottom: 2%;
-    color: black;
-    text-decoration: none;
-}
-
-.profile--button:hover
-{
-    background-image: url("./images/button--name-background-h.png");
+    position: absolute;
+    left: 25%;
+    width: 50%;
+    height: 90%;
+    top: 5%;
+    padding-top: 2%;
+    justify-content: center;
 }
 
 #profile--user-name
 {
     display: block;
     color: white;
-    margin-left: 15%;
+}
+
+
+.profile--button-friend
+{
+    display: inline-block;
+    width: 45%;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+.profile--button-friend:hover
+{
+    background-color: rgba(10, 10, 10, 0.8);
+}
+
+.profile--button
+{
+    display: inline-block;
+    width: 100%;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.profile--button:hover
+{
+    background-color: rgba(10, 10, 10, 0.8);
+}
+
+#profile--button-exit
+{
+    position: absolute;
+    width: 50%;
+    height: 20%;
+    bottom: 0%;
+    left: 25%;
+    font-size: 40px;
+    color: white;
+    background-color: rgba(10, 10, 10, 0.8);
+    
+}
+#profile--button-exit:hover
+{
+    background-color: gray;
+}
+
+
+.profile--block
+{
+    font-size: 40px;
+    width: 100%;
+    background-color: rgba(30, 30, 30, 0.8);
+    margin-top: 3%;
+    border-radius: 10px;
+    text-align: center;
 }
 
 #main--header
 {
     display: block;
     color: white;
-    margin-left: 15%;
 }

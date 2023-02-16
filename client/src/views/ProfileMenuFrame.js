@@ -23,7 +23,7 @@ export default class ProfileMenu extends React.Component
     }
 
     getUserProps = (id) => {
-        axios.post("http://192.168.1.6:3001/profile", {userid:id})
+        axios.post("http://192.168.1.3:3001/profile", {userid:id})
         .then((res) => {
             this.setState(() => ({
                 uname: res.data.props
@@ -38,7 +38,7 @@ export default class ProfileMenu extends React.Component
     localStorage.removeItem("cow-bull--login-state")
     localStorage.removeItem("cow-bull--login-key")
     // отправлять на главную страничку после выхода
-    window.location.assign("http://192.168.1.6:3000")
+    window.location.assign("http://192.168.1.3:3000")
     }
 
     profileGenerator = () => {
@@ -48,8 +48,8 @@ export default class ProfileMenu extends React.Component
             <p id="profile--user-name">{this.state.uname}</p>
         </div>)
         elem[2] = (<div className="profile--block">
-            <a href="" className="profile--button">Добавить в друзья</a>
-            <a href="" className="profile--button">Написать сообщение</a>
+            <a href="" className="profile--button-friend">Добавить в друзья</a>
+            <a href="" className="profile--button-friend">Написать сообщение</a>
         </div>
         )
         elem[3] = (<div className="profile--block">
@@ -62,9 +62,9 @@ export default class ProfileMenu extends React.Component
         elem[5] = (<div className="profile--block">
             <a href="#" className="profile--button">Отсутствует</a>
         </div>)
-        elem[6] = (<div className="profile--block">
-        <button onClick={this.logoutUser} className="profile--button">Выйти</button>
-    </div>)
+        elem[6] = (
+            <button onClick={this.logoutUser} id="profile--button-exit">Выйти</button>
+        )
         return elem
     }
 
@@ -76,7 +76,7 @@ export default class ProfileMenu extends React.Component
     render()
     {
         const menuRender = [2]
-        const profileElements = (<main id="profile--main">{this.profileGenerator()}</main>)
+        const profileElements = (<main id="profile--content">{this.profileGenerator()}</main>)
 
         menuRender[0] = MainMenuElements()[0]
         menuRender[1] = profileElements
