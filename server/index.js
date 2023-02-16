@@ -5,7 +5,7 @@ const express = require("express");
 const cors = require('cors');
 const http = require('http');
 const { Server } = require("socket.io");
-
+const { timeStamp } = require("console");
 
 const app = express();
 const port = process.env.DEFAULT_PORT;
@@ -198,14 +198,21 @@ app.post("/login",function(req, res){
 
 app.post("/add-new-post", function(req,res){
   const reqData = req.body;
-  tools.queryToDb(`insert into "Posts" (data, postname, userid, username)
-  values ($1,$2,$3,$4)`, [reqData.text, reqData.title, reqData.uid, reqData.author])
-  .then(ret =>{
-    res.json({message:"success"});
+  const timestamp = new Date();
+  let tag = 'user';
+  tools.queryToDb(`select rule from userstable where id = $1 limit 1`,[reqData.uid])
+  .then(ret => {
+    if(ret[0].rule==='a') tag = 'maintenance';
+
+    tools.queryToDb(`insert into "Posts" (data, postname, userid, username, tag, time)
+    values ($1,$2,$3,$4,$5,$6)`, [reqData.text, reqData.title, reqData.uid, reqData.author, tag, timestamp])
+    .then(() => {
+      res.json({message:"success"});
+    })
+    .catch(err => {
+      res.json({message:"Что-то пошло не так.."});
+    });
   })
-  .catch(err => {
-    res.json({message:"Что-то пошло не так.."});
-  });
 });
 
 

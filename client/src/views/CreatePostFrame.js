@@ -65,7 +65,7 @@ export default class CreatePost extends React.Component
         }
         if(data.author)
         {
-            axios.post("http://192.168.1.3:3001/add-new-post",data)
+            axios.post("http://192.168.1.3:3001/add-new-post", data)
             .then(res => {
                     if(res.data.message === "success")
                     {
