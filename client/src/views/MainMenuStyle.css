@@ -23,8 +23,20 @@
 
 #button--profile
 {
-    float: right;
+    position: absolute;
+    top: 0px;
     right: 0px;
+    height: 100%;
+    text-decoration: none;
+    color: white;
+    border-left: 2px solid gray;
+    border-right: 2px solid gray;
+    border-radius: 5px;
+}
+
+#button--profile:hover
+{
+    background-color: gray;
 }
 
 #footer--links
@@ -67,8 +79,6 @@
     height: 50%;
     left: 2%;
     
-    border: 2px solid white;
-    border-radius: 20px;
 
     opacity: 0.9;
 }
@@ -121,6 +131,28 @@
     background-color: gray;
 }
 
+.input--label
+{
+    position: relative;
+    display: block;
+    margin-left: 50%;
+    margin-top: 3%;
+    transform: translateX(-50%);
+    width: 30%;
+    height: 5%;
+    color: gray;
+}
+
+.input--label span
+{
+    position: absolute;
+
+    cursor: text;
+    pointer-events: none;
+    color: #999;
+    line-height: 17px;
+    margin-left: 2px;
+}
 
 #loginMenu
 {
@@ -198,29 +230,6 @@
     height: 40px;
     width: 100%;
     text-align:center;
-}
-
-.input--label
-{
-    position: relative;
-    display: block;
-    margin-left: 50%;
-    margin-top: 3%;
-    transform: translateX(-50%);
-    width: 30%;
-    height: 5%;
-    color: gray;
-}
-
-.input--label span
-{
-    position: absolute;
-
-    cursor: text;
-    pointer-events: none;
-    color: #999;
-    line-height: 17px;
-    margin-left: 2px;
 }
 
 .input--field

@@ -3,16 +3,17 @@ import './postStyle.css'
 import CommentConstructor from "./commentsConstructor"
 import axios from "axios"
 import {SocketContext} from "./socket"
+import InputElement from "./elementsContainer"
 
 
 const MessagesCollection = ({user, room}) => {
-    const socket = useContext(SocketContext)
+    var uncheckedComs
+    var commrow = []
 
+    const [initstate, setInitstate] = useState(false)
+    const socket = useContext(SocketContext)
     const [comments, setComments] = useState([])
 
-
-    
-    
     const fetchComment = (commentId) => {
         axios.post("http://192.168.1.3:3001/comment-fetch", {commentId:commentId})
             .then((ares) => {
@@ -26,6 +27,22 @@ const MessagesCollection = ({user, room}) => {
 
                 setComments([...comments, addedComm])
             })
+    }
+
+    const loadComms = (initValue, currentStep) => {
+
+        let commentList = [currentStep]
+        console.log(initValue)
+        
+        for(let i = initValue; i < currentStep; i++)
+        {
+            const authProps = {
+                name: commrow[i].username,
+                id: commrow[i].userid
+            }
+            commentList[i-initValue] = (<CommentConstructor authorProps={authProps} textData={commrow[i].data}/>)
+        }
+        setComments(commentList.concat(comments))
     }
     
     const updateComms = (comId) => {
@@ -45,6 +62,8 @@ const MessagesCollection = ({user, room}) => {
         
         if(JSON.parse(localStorage.getItem("cow-bull--login-state")))
         {
+            document.getElementById(`comment--data&${room}`).value=''
+
             axios.post("http://192.168.1.3:3001/comment--send", dataList)
             .then((res) => {
                 if(res.data.message==="success")
@@ -60,28 +79,33 @@ const MessagesCollection = ({user, room}) => {
 
     }
 
+    //set on initial loading!
+    if(!initstate)
+    {
     axios.post("http://192.168.1.3:3001/comments-fetch", {postId: room})
     .then((res) => {
         if(res.data.message === "success")
         {
-            
-            let commentList = [res.data.comList.length]
-            for(let i = 0; i < res.data.comList.length; i++)
+            commrow = res.data.comList
+
+            if(commrow.length < 20)
             {
-                const authProps = {
-                    name: res.data.comList[i].username,
-                    id: res.data.comList[i].userid
-                }
-                commentList[i] = (<CommentConstructor authorProps={authProps} textData={res.data.comList[i].data}/>)
+                loadComms(0, commrow.length)
             }
-            setComments(commentList)
+            else
+            {
+                loadComms(commrow.length-20, commrow.length)
+            }
+            
         }
         else
         {
             //Error notification
         }
     })
-
+    
+    setInitstate(true)
+    }
     
     useEffect(() => {
         socket.emit('join_room', { userid: user, room: room })
@@ -99,10 +123,19 @@ const MessagesCollection = ({user, room}) => {
         }
     },[socket])
 
+    const loadMore = () => {
+        loadComms(comments.length-uncheckedComs,comments.length)
+    }
+
+    uncheckedComs = commrow.length - comments.length
+    console.log(uncheckedComs)
     return (<div className="post--comments-part">
+        {uncheckedComs>0 ? <button onClick={loadMore}>Показать ещё {uncheckedComs}</button> : null}
             {comments}
-            <input type="text" name="comment--input" id={`comment--data&${room}`} defaultValue="введите комментарий..."></input>
-            <button name="comment--send" onClick={commentSend}>{">>"}</button>
+            <div className="comment--section">
+                <InputElement mclass='input--comm-sender' buttonName="введите комментарий..." itype="text" iname="comment--input" elclass="comment--input" elid={`comment--data&${room}`} />
+                <button name="comment--send" className="comment--send" onClick={commentSend}>{">>"}</button>
+            </div>
         </div>)
     
 }
@@ -145,11 +178,11 @@ export default class PostConstructor extends React.Component
     {
         var elem
         
-        if(this.state.isOpened)
+        if(this.state.isOpened||this.state.text.length<500)
         {
             elem = (
                 <div className="post--container">
-                    <section className="post--body" onClick={this.showPost}>
+                    <section className="post--body">
                         <h1 className="post--title">{this.state.header}</h1>
                         <p className="post--body">{this.state.text}</p>
                     </section>
@@ -165,9 +198,9 @@ export default class PostConstructor extends React.Component
         {
             elem = (
                 <div className="post--container">
-                    <section className="post--body" onClick={this.showPost}>
+                    <section className="post--body" >
                         <h1 className="post--title">{this.state.header}</h1>
-                        <p className="post--body">{this.state.text.substring(0,1000) + "..."}</p>
+                        <p className="post--body">{this.state.text.substring(0,500)}<div className="open--post" onClick={this.showPost}>читать полностью...</div></p>
                     </section>
                     <section className="post--footer">
                         <button className="post--button-like"></button>

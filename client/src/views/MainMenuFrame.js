@@ -3,6 +3,7 @@ import React from 'react'
 import classnames from "classnames"
 import axios from "axios"
 import validator from "validator"
+import InputElement from './components/elementsContainer'
 
 function MainMenuElements()
 {
@@ -99,8 +100,8 @@ class ButtonProfile extends React.Component {
                 <a href='/forum' className="refButtons" key="f">Форум</a>
                 <a href='/about' className="refButtons" key="a">О проекте</a>
               </section>
+              <a id='button--profile' href={hrefLink}>{JSON.parse(localStorage.getItem("cow-bull--name"))}  </a>
             </nav>
-            <a className='refButtons' id='button--profile' href={hrefLink}>{JSON.parse(localStorage.getItem("cow-bull--name"))}  </a>
         </section>
       )
     }
@@ -179,10 +180,10 @@ class RegisterField extends React.Component
     return(
       <section id='logreg--position'>
         <p id ="attentionRegText"></p>
-        <InputElement buttonName='Почта' itype='email' iname='email' />
-        <InputElement buttonName='Имя' itype='text' iname='username' />
-        <InputElement buttonName='Пароль' itype='password' iname='password' />
-        <InputElement buttonName='Повтор пароля' itype='password' iname='repeatPassword' />
+        <InputElement mclass='input--label' buttonName='Почта' itype='email' iname='email' elclass='input--field' />
+        <InputElement mclass='input--label' buttonName='Имя' itype='text' iname='username' elclass='input--field' />
+        <InputElement mclass='input--label' buttonName='Пароль' itype='password' iname='password' elclass='input--field' />
+        <InputElement mclass='input--label' buttonName='Повтор пароля' itype='password' iname='repeatPassword' elclass='input--field' />
         <button name="submitForm" className='login-menu--button' onClick={this.getRegistered}> Зарегистрироваться </button>
       </section>
     )
@@ -323,44 +324,14 @@ class LoginField extends React.Component
     return(
       <section id="logreg--position">
         <p id="attentionLogText"></p>
-        <InputElement buttonName='Почта' itype='email' iname='email' dValue={JSON.parse(localStorage.getItem("cow-bull--prefemail"))} />
-        <InputElement buttonName='Пароль' itype='password' iname='password' />
+        <InputElement mclass='input--label' buttonName='Почта' itype='email' iname='email' elclass='input--field' dValue={JSON.parse(localStorage.getItem("cow-bull--prefemail"))} />
+        <InputElement mclass='input--label' buttonName='Пароль' itype='password' iname='password' elclass='input--field' />
         <button name="submitForm" className='login-menu--button' onClick={this.getLogining}> Войти </button>
       </section>
     )
   }
 }
 
-class InputElement extends React.Component
-{
-  constructor(props)
-  {
-    super(props)
-    
-    this.state = {
-      text:props.buttonName,
-      itype:props.itype,
-      dValue:props?.dValue,
-      iname:props.iname,
-      clearInput: props.dValue === undefined
-    }
-    this.getInput = this.getInput.bind(this)
-  }
 
-  getInput = (e) => {
-    this.setState({clearInput:(e.target.value.length === 0)})
-  }
-
-  render()
-  {
-    return (
-    <div className='input--label'>
-      <span className={classnames("--visibled", {
-            "--hidden": !this.state.clearInput
-          })}>{this.state.text}</span>
-      <input type={this.state.itype} className='input--field' name={this.state.iname} onChange={this.getInput} defaultValue={this.state.dValue} autoComplete='off'></input>
-    </div>);
-  }
-}
 
 export default MainMenuElements

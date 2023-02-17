@@ -69,7 +69,7 @@ export default class CreatePost extends React.Component
             .then(res => {
                     if(res.data.message === "success")
                     {
-                        window.location.assign('http://192.168.1.3:3000')
+                        window.location.assign('http://192.168.1.3:3000/forum')
                     }
                     else
                     {

@@ -105,7 +105,9 @@ app.post("/comment-fetch", function(req, res){
 });
 
 app.post("/comments-fetch", function(req, res){
+
   const postId = req.body.postId;
+  
   tools.queryToDb(`select "commentID", userid, username, data from "Comments" where "postID" = $1`,[postId])
   .then((ret) => {
     if(ret.length > 0)

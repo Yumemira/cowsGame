@@ -1,0 +1,29 @@
+.comment--body
+{
+    position: relative;
+    width: 60%;
+    left: 20%;
+    border-radius: 10px;
+    border-bottom: 1px solid white;
+    margin-top: 2%;
+}
+
+.comment--author-name
+{
+    border: 1px solid white;
+    text-align: center;
+    font-size: 35px;
+    background-color: rgba(10,10,10,0.8);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.comment--author-name:hover
+{
+    background-color: rgb(59, 59, 59);
+}
+
+.comment--text
+{
+    font-size: 30px;
+}

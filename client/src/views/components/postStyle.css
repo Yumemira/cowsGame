@@ -8,10 +8,6 @@
     margin-top: 2%;
     color: white;
 }
-.post--container:hover
-{
-    background-color: rgb(20, 20, 20);
-}
 
 .post--body
 {
@@ -34,6 +30,8 @@
     left: 30%;
     width: 100px;
     height: 100px;
+    border-radius: 30%;
+    cursor: pointer;
 }
 
 .post--button-like:hover
@@ -43,6 +41,8 @@
 
 .post--button-comm
 {
+    border-radius: 30%;
+    cursor: pointer;
     position: relative;
     background-color: inherit;
     background-image: url("../images/comm.png");
@@ -64,4 +64,73 @@
     width: 90%;
     left: 5%;
     border-top: 1px solid white;
+}
+
+.open--post
+{
+    cursor: pointer;
+}
+
+.comment--section
+{
+    margin-left: 5%;
+    margin-top: 5%;
+    margin-bottom: 2%;
+
+    width: 90%;
+    height: 40px;
+}
+
+.comment--input
+{
+    position: relative;
+    display: inline-block;
+    font-size: 40px;
+    background-color: rgba(10, 10, 10,0.8);
+    color: white;
+    width: 80%;
+    height: 40px;
+    border: none;
+    border-top: 1px solid white;
+    border-bottom-left-radius: 10px;
+}
+
+.comment--input:focus
+{
+    outline: none;
+}
+
+.comment--send
+{
+    position: absolute;
+    background-color: rgba(10, 10, 10,0.8);
+    width: 20%;
+    height: 43px;
+    right: 7.5%;
+    border-top-right-radius: 10px;
+    border: none;
+    border-left: 1px solid white;
+    border-top: 1px solid white;
+}
+
+.input--comm-sender
+{
+    position: relative;
+    display: inline-block;
+    width: 80%;
+    left: 10%;
+    height: 50px;
+    color: gray;
+}
+
+.input--comm-sender span
+{
+    position: absolute;
+    top:7px;
+    cursor: text;
+    pointer-events: none;
+    color: #999;
+    line-height: 17px;
+    font-size: 30px;
+    margin-left: 2px;
 }

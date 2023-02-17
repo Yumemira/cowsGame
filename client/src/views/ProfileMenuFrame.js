@@ -44,27 +44,35 @@ export default class ProfileMenu extends React.Component
     profileGenerator = () => {
         const elem = [7]
         elem[0] = (<div className="profile--block"><p id="main--header">Профиль</p></div>)
+        
         elem[1] = (<div className="profile--block">
             <p id="profile--user-name">{this.state.uname}</p>
         </div>)
+
         elem[2] = (<div className="profile--block">
             <a href="" className="profile--button-friend">Добавить в друзья</a>
             <a href="" className="profile--button-friend">Написать сообщение</a>
-        </div>
-        )
+        </div>)
+
         elem[3] = (<div className="profile--block">
             <a href="" className="profile--button">Достижения</a>
         </div>)
+        
         elem[4] = (<div className="profile--block">
             <a href="#" className="profile--button">1437 ДД...</a>
-        </div>
-        )
+        </div>)
+        
         elem[5] = (<div className="profile--block">
             <a href="#" className="profile--button">Отсутствует</a>
         </div>)
-        elem[6] = (
-            <button onClick={this.logoutUser} id="profile--button-exit">Выйти</button>
-        )
+
+        if(this.state.profileId===JSON.parse(localStorage.getItem("cow-bull--user-id")))
+        {
+            elem[6] = (
+                <button onClick={this.logoutUser} id="profile--button-exit">Выйти</button>
+            )
+        }
+
         return elem
     }
 
